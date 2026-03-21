@@ -23,7 +23,15 @@ Register the MCP server (one-time):
 """
 
 import os
+import logging
 import anthropic
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+log = logging.getLogger(__name__)
 
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
@@ -47,6 +55,9 @@ def audit_wallet(wallet_address: str, network: str) -> str:
 
     Returns a structured report with an overall verdict.
     """
+    log.info("Starting audit for wallet=%s network=%s", wallet_address, network)
+    log.info("Calling ChainAware MCP — fraud, behaviour, rug-pull checks")
+
     response = client.beta.messages.create(
         model="claude-opus-4-6",
         max_tokens=4096,
@@ -68,15 +79,29 @@ def audit_wallet(wallet_address: str, network: str) -> str:
         betas=["mcp-client-2025-04-04"],
     )
 
-    return next((b.text for b in response.content if b.type == "text"), "")
+    log.info(
+        "Response received — stop_reason=%s input_tokens=%d output_tokens=%d",
+        response.stop_reason,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+    )
+
+    result = next((b.text for b in response.content if b.type == "text"), "")
+    if not result:
+        log.warning("No text block found in response content")
+    else:
+        log.info("Audit complete — report length=%d chars", len(result))
+    return result
 
 
 if __name__ == "__main__":
-    wallet = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"  # vitalik.eth
+    wallet = "0x77D1D1638d6770de23125F6298D2814A6ecebccC"  # vitalik.eth
     network = "ETH"
 
+    log.info("=== Wallet Auditor starting ===")
     print(f"Auditing wallet: {wallet} on {network}\n")
     print("=" * 60)
 
     report = audit_wallet(wallet, network)
     print(report)
+    log.info("=== Wallet Auditor done ===")
