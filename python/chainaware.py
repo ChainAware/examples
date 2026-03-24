@@ -35,7 +35,11 @@ def run(prompt: str, model: str = "claude-opus-4-6", max_tokens: int = 4096) -> 
         messages=[{"role": "user", "content": prompt}],
         betas=["mcp-client-2025-04-04"],
     )
-    return next((b.text for b in response.content if b.type == "text"), "")
+    result = ""
+    for b in response.content:
+        if b.type == "text":
+            result = result + "\n\n" + b.text
+    return result
 
 
 def api_key() -> str:

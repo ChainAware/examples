@@ -86,7 +86,11 @@ def audit_wallet(wallet_address: str, network: str) -> str:
         response.usage.output_tokens,
     )
 
-    result = next((b.text for b in response.content if b.type == "text"), "")
+    result = ""
+    for b in response.content:
+        if b.type == "text":
+            result = result + "\n\n" + b.text
+
     if not result:
         log.warning("No text block found in response content")
     else:
