@@ -7,7 +7,10 @@ the MCP tools available.
 """
 
 import os
+import logging
 import anthropic
+
+log = logging.getLogger(__name__)
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 CHAINAWARE_API_KEY = os.environ["CHAINAWARE_API_KEY"]
@@ -34,6 +37,12 @@ def run(prompt: str, model: str = "claude-opus-4-6", max_tokens: int = 4096) -> 
         mcp_servers=[MCP_SERVER],
         messages=[{"role": "user", "content": prompt}],
         betas=["mcp-client-2025-04-04"],
+    )
+    log.info(
+        "Response received — stop_reason=%s input_tokens=%d output_tokens=%d",
+        response.stop_reason,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
     )
     result = ""
     for b in response.content:

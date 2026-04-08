@@ -23,9 +23,8 @@ Register the MCP server (one-time):
       --header "X-API-Key: $CHAINAWARE_API_KEY"
 """
 
-import os
 import logging
-import anthropic
+import chainaware
 
 logging.basicConfig(
     level=logging.INFO,
@@ -33,16 +32,6 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 log = logging.getLogger(__name__)
-
-client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-
-CHAINAWARE_API_KEY = os.environ["CHAINAWARE_API_KEY"]
-
-MCP_SERVER = {
-    "type": "url",
-    "url": f"https://prediction.mcp.chainaware.ai/sse?apiKey={CHAINAWARE_API_KEY}",
-    "name": "chainaware-behavioral-prediction",
-}
 
 
 def detect_fraud(wallet_address: str, network: str) -> str:
@@ -56,39 +45,18 @@ def detect_fraud(wallet_address: str, network: str) -> str:
       - Sanction exposure data
     """
     log.info("Starting fraud detection for wallet=%s network=%s", wallet_address, network)
+
+    prompt = (
+        f"Use the predictive_fraud tool to assess this wallet.\n\n"
+        f"Wallet:  {wallet_address}\n"
+        f"Network: {network}\n"
+        f"API Key: {chainaware.api_key()}\n\n"
+        f"Return: fraud status, probability score, key forensic indicators "
+        f"that are flagged, sanction exposure, and a plain-English risk summary."
+    )
+
     log.info("Calling predictive_fraud via ChainAware MCP")
-
-    response = client.beta.messages.create(
-        model="claude-opus-4-6",
-        max_tokens=4096,
-        mcp_servers=[MCP_SERVER],
-        messages=[
-            {
-                "role": "user",
-                "content": (
-                    f"Use the predictive_fraud tool to assess this wallet.\n\n"
-                    f"Wallet:  {wallet_address}\n"
-                    f"Network: {network}\n"
-                    f"API Key: {CHAINAWARE_API_KEY}\n\n"
-                    f"Return: fraud status, probability score, key forensic indicators "
-                    f"that are flagged, sanction exposure, and a plain-English risk summary."
-                ),
-            }
-        ],
-        betas=["mcp-client-2025-04-04"],
-    )
-
-    log.info(
-        "Response received — stop_reason=%s input_tokens=%d output_tokens=%d",
-        response.stop_reason,
-        response.usage.input_tokens,
-        response.usage.output_tokens,
-    )
-
-    result = ""
-    for b in response.content:
-        if b.type == "text":
-            result = result + "\n\n" + b.text
+    result = chainaware.run(prompt)
 
     if not result:
         log.warning("No text block found in response content")
