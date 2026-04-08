@@ -19,7 +19,7 @@ CHAINAWARE_API_KEY = os.environ["CHAINAWARE_API_KEY"]
 # Each tool also receives the API key explicitly in the prompt.
 MCP_SERVER = {
     "type": "url",
-    "url": f"https://prediction.mcp.chainaware.ai/sse?apiKey={CHAINAWARE_API_KEY}",
+    "url": f"https://prediction.mcpbeta.chainaware.ai/sse?apiKey={CHAINAWARE_API_KEY}",
     "name": "chainaware-behavioral-prediction",
 }
 
