@@ -26,17 +26,20 @@ MCP_SERVER = {
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
-def run(prompt: str, model: str = "claude-opus-4-6", max_tokens: int = 4096) -> str:
+def run(prompt: str, system: str = None, model: str = "claude-opus-4-6", max_tokens: int = 4096) -> str:
     """
     Send a prompt to Claude with the ChainAware MCP tools available.
     Claude will call the appropriate tools and return a final answer.
+    Pass system to override the default behaviour with an agent definition.
     """
+    kwargs = {"system": system} if system else {}
     response = client.beta.messages.create(
         model=model,
         max_tokens=max_tokens,
         mcp_servers=[MCP_SERVER],
         messages=[{"role": "user", "content": prompt}],
         betas=["mcp-client-2025-04-04"],
+        **kwargs,
     )
     log.info(
         "Response received — stop_reason=%s input_tokens=%d output_tokens=%d",

@@ -67,7 +67,7 @@ def detect_fraud(wallet_address: str, network: str) -> str:
 
 
 if __name__ == "__main__":
-    wallet = "0x7a411950182288892c6D73B8e3EAF08E3c3bd3bd"
+    wallet = "0x77D1D1638d6770de23125F6298D2814A6ecebccC"
     network = "ETH"
 
     log.info("=== Fraud Detector starting ===")
