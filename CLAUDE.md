@@ -114,6 +114,22 @@ else:
 | `lead_scorer.py` | `chainaware-lead-scorer.md` |
 | `lending_risk_assessor.py` | `chainaware-lending-risk-assessor.md` |
 | `marketing_director.py` | `chainaware-marketing-director.md` |
+| `reputation_scorer.py` | `chainaware-reputation-scorer.md` |
+| `rwa_investor_screener.py` | `chainaware-rwa-investor-screener.md` |
+| `trust_scorer.py` | `chainaware-trust-scorer.md` |
+| `upsell_advisor.py` | `chainaware-upsell-advisor.md` |
+| `wallet_marketer.py` | `chainaware-wallet-marketer.md` |
+| `wallet_ranker.py` | `chainaware-wallet-ranker.md` |
+| `whale_detector.py` | `chainaware-whale-detector.md` |
+
+### Unique input patterns
+
+| Script | Agent |
+|--------|-------|
+| `token_analyzer.py` | `chainaware-token-analyzer.md` |
+| `token_launch_auditor.py` | `chainaware-token-launch-auditor.md` |
+| `token_ranker.py` | `chainaware-token-ranker.md` |
+| `transaction_monitor.py` | `chainaware-transaction-monitor.md` |
 
 ### CSV batch only
 
@@ -161,6 +177,13 @@ python python/agents/governance_screener.py 0xABC... ETH token-weighted
 python python/agents/lead_scorer.py 0xABC... ETH "DeFi lending" acquisition
 python python/agents/lending_risk_assessor.py 0xABC... ETH standard '$10,000' '6%'
 python python/agents/marketing_director.py 0xABC... ETH "Platform description"
+python python/agents/reputation_scorer.py 0xABC... ETH
+python python/agents/rwa_investor_screener.py 0xABC... ETH moderate
+python python/agents/trust_scorer.py 0xABC... ETH
+python python/agents/upsell_advisor.py 0xABC... ETH "basic DEX swap" revenue
+python python/agents/wallet_marketer.py 0xABC... ETH
+python python/agents/wallet_ranker.py 0xABC... ETH
+python python/agents/whale_detector.py 0xABC... ETH
 
 # CSV batch
 python python/agents/airdrop_screener.py wallets.csv ETH
@@ -172,6 +195,19 @@ python python/agents/governance_screener.py wallets.csv ETH reputation-weighted 
 python python/agents/lead_scorer.py wallets.csv ETH "DeFi lending" acquisition
 python python/agents/lending_risk_assessor.py wallets.csv ETH conservative
 python python/agents/marketing_director.py wallets.csv ETH "Platform description" retention
+python python/agents/reputation_scorer.py wallets.csv ETH
+python python/agents/rwa_investor_screener.py wallets.csv ETH moderate '$50,000'
+python python/agents/trust_scorer.py wallets.csv ETH
+python python/agents/upsell_advisor.py wallets.csv ETH "basic DEX swap" retention
+python python/agents/wallet_marketer.py wallets.csv ETH
+python python/agents/wallet_ranker.py wallets.csv ETH
+python python/agents/whale_detector.py wallets.csv ETH
+
+# unique input patterns
+python python/agents/token_analyzer.py 0xCONTRACT... ETH
+python python/agents/token_launch_auditor.py 0xCONTRACT... 0xDEPLOYER... ETH
+python python/agents/token_ranker.py ETH "DeFi Token" 10
+python python/agents/transaction_monitor.py 0xSENDER... 0xRECEIVER... ETH
 
 # MCP direct
 python python/MCP/fraud_detector.py

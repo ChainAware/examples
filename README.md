@@ -93,6 +93,13 @@ python python/agents/defi_advisor.py
 | `lead_scorer.py` | `chainaware-lead-scorer.md` | address or CSV + network | Lead score (0–100) + tier (Hot/Warm/Cold/Dead) + outreach angle |
 | `lending_risk_assessor.py` | `chainaware-lending-risk-assessor.md` | address or CSV + network | Borrower risk grade (A–F) + collateral ratio + interest rate tier |
 | `marketing_director.py` | `chainaware-marketing-director.md` | address or CSV + network + platform description | Full marketing campaign brief — segments, hot leads, whales, message playbook |
+| `reputation_scorer.py` | `chainaware-reputation-scorer.md` | address or CSV + network | Reputation score (0–4000) using the ChainAware formula: experience × risk × (1 - fraud) |
+| `rwa_investor_screener.py` | `chainaware-rwa-investor-screener.md` | address or CSV + network | RWA investor suitability tier (QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED) + investment cap |
+| `trust_scorer.py` | `chainaware-trust-scorer.md` | address or CSV + network | Trust score (0.00–1.00) = 1 - fraud_probability |
+| `upsell_advisor.py` | `chainaware-upsell-advisor.md` | address or CSV + network + current product | Best next product, upgrade readiness score, conversion probability, trigger event |
+| `wallet_marketer.py` | `chainaware-wallet-marketer.md` | address or CSV + network | Hyper-personalized 20-word marketing message derived from on-chain behavior |
+| `wallet_ranker.py` | `chainaware-wallet-ranker.md` | address or CSV + network | Global wallet rank — experience, total points, wallet age, behavioral segments |
+| `whale_detector.py` | `chainaware-whale-detector.md` | address or CSV + network | Whale tier (MEGA WHALE / WHALE / EMERGING WHALE / NOT A WHALE) + domain + status |
 
 ```bash
 # single wallet
@@ -104,6 +111,13 @@ python python/agents/governance_screener.py 0xABC... ETH token-weighted
 python python/agents/lead_scorer.py 0xABC... ETH "DeFi lending platform" acquisition
 python python/agents/lending_risk_assessor.py 0xABC... ETH standard '$10,000' '6%'
 python python/agents/marketing_director.py 0xABC... ETH "Your platform description"
+python python/agents/reputation_scorer.py 0xABC... ETH
+python python/agents/rwa_investor_screener.py 0xABC... ETH moderate
+python python/agents/trust_scorer.py 0xABC... ETH
+python python/agents/upsell_advisor.py 0xABC... ETH "basic DEX swap" revenue
+python python/agents/wallet_marketer.py 0xABC... ETH
+python python/agents/wallet_ranker.py 0xABC... ETH
+python python/agents/whale_detector.py 0xABC... ETH
 
 # CSV batch
 python python/agents/onboarding_router.py wallets.csv ETH "A DeFi lending platform"
@@ -111,6 +125,32 @@ python python/agents/governance_screener.py wallets.csv ETH reputation-weighted 
 python python/agents/lead_scorer.py wallets.csv ETH "DeFi lending platform" acquisition
 python python/agents/lending_risk_assessor.py wallets.csv ETH conservative
 python python/agents/marketing_director.py wallets.csv ETH "Your platform description" retention
+python python/agents/reputation_scorer.py wallets.csv ETH
+python python/agents/rwa_investor_screener.py wallets.csv ETH moderate '$50,000'
+python python/agents/trust_scorer.py wallets.csv ETH
+python python/agents/upsell_advisor.py wallets.csv ETH "basic DEX swap" retention
+python python/agents/wallet_marketer.py wallets.csv ETH
+python python/agents/wallet_ranker.py wallets.csv ETH
+python python/agents/whale_detector.py wallets.csv ETH
+```
+
+#### Unique input patterns
+
+| Script | Agent | Input | What it does |
+|--------|-------|-------|-------------|
+| `token_analyzer.py` | `chainaware-token-analyzer.md` | contract + network | Community rank + top holder profiles + holder quality assessment |
+| `token_launch_auditor.py` | `chainaware-token-launch-auditor.md` | contract + deployer + network | Launch Safety Score + APPROVED/CONDITIONAL/REJECTED verdict + safety badge |
+| `token_ranker.py` | `chainaware-token-ranker.md` | network + category | Top tokens ranked by holder community strength |
+| `transaction_monitor.py` | `chainaware-transaction-monitor.md` | sender + receiver + network | Real-time risk signal: ALLOW / FLAG / HOLD / BLOCK |
+
+```bash
+python python/agents/token_analyzer.py 0xCONTRACT... ETH
+python python/agents/token_analyzer.py 0xCONTRACT... ETH fraud        # also screen top holders
+python python/agents/token_launch_auditor.py 0xCONTRACT... 0xDEPLOYER... ETH
+python python/agents/token_ranker.py ETH "DeFi Token" 10
+python python/agents/token_ranker.py SOLANA "AI Token" 5
+python python/agents/transaction_monitor.py 0xSENDER... 0xRECEIVER... ETH
+python python/agents/transaction_monitor.py 0xSENDER... 0xRECEIVER... ETH "" "2.5 ETH" swap
 ```
 
 #### CSV batch only
