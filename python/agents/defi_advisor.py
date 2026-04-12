@@ -1,12 +1,13 @@
 """
-ChainAware Example: Fraud Detector
-====================================
-Agent: chainaware-fraud-detector
-Source: .claude/agents/chainaware-fraud-detector.md
+ChainAware Example: DeFi Advisor
+==================================
+Agent: chainaware-defi-advisor
+Source: .claude/agents/chainaware-defi-advisor.md
 
-Uses the agent definition .md file as the system prompt so that tool
-instructions, output format, and risk thresholds live in the .md —
-not in code.
+Returns personalized DeFi product recommendations calibrated to a wallet's
+experience level and risk willingness. Higher experience + higher risk appetite
+maps to more complex, higher-yield products; lower experience + lower risk maps
+to simpler, protected products.
 
 Setup:
     pip install anthropic
@@ -30,7 +31,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 AGENT_MD = os.path.join(
-    os.path.dirname(__file__), "..", "..", ".claude", "agents", "chainaware-fraud-detector.md"
+    os.path.dirname(__file__), "..", "..", ".claude", "agents", "chainaware-defi-advisor.md"
 )
 
 
@@ -46,42 +47,43 @@ def load_agent(path: str) -> tuple[str, str]:
     return model, body
 
 
-def detect_fraud(wallet_address: str, network: str) -> str:
+def advise_defi(wallet: str, network: str) -> str:
     """
-    Run a fraud detection and AML check on a wallet address.
-    Behaviour is driven by the chainaware-fraud-detector.md agent definition.
+    Return personalized DeFi product recommendations for a wallet.
+    Behaviour is driven by the chainaware-defi-advisor.md agent definition.
     """
-    log.info("Starting fraud detection for wallet=%s network=%s", wallet_address, network)
+    log.info("Starting DeFi advisor — wallet=%s network=%s", wallet, network)
 
     model, system_prompt = load_agent(AGENT_MD)
 
     user_message = (
-        f"Check this wallet for fraud.\n\n"
-        f"Wallet:  {wallet_address}\n"
+        f"Recommend DeFi products for this wallet.\n\n"
+        f"Wallet:  {wallet}\n"
         f"Network: {network}\n"
         f"API Key: {chainaware.api_key()}"
     )
 
-    log.info("Calling predictive_fraud via chainaware-fraud-detector agent (model=%s)", model)
+    log.info("Calling DeFi advisor (model=%s)", model)
     result = chainaware.run(user_message, system=system_prompt, model=model)
 
     if not result:
         log.warning("No text block found in response content")
     else:
-        log.info("Fraud detection complete — report length=%d chars", len(result))
+        log.info("DeFi advice complete — report length=%d chars", len(result))
 
     return result
 
 
 if __name__ == "__main__":
-    wallet = "0x77D1D1638d6770de23125F6298D2814A6ecebccC"
+    wallet  = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045"  # vitalik.eth
     network = "ETH"
 
-    log.info("=== Fraud Detector starting ===")
-    print(f"Checking wallet: {wallet} on {network}\n")
+    log.info("=== DeFi Advisor starting ===")
+    print(f"Wallet:  {wallet}")
+    print(f"Network: {network}\n")
     print("=" * 60)
 
-    report = detect_fraud(wallet, network)
+    report = advise_defi(wallet, network)
     print(report)
 
-    log.info("=== Fraud Detector done ===")
+    log.info("=== DeFi Advisor done ===")

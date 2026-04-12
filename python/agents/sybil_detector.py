@@ -30,8 +30,7 @@ import os
 import re
 import sys
 
-# Resolve chainaware.py from python/MCP relative to this file
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "MCP"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import chainaware
 
 logging.basicConfig(
