@@ -140,6 +140,7 @@ else:
 | `ltv_estimator.py` | `chainaware-ltv-estimator.md` |
 | `sybil_detector.py` | `chainaware-sybil-detector.md` |
 | `gamefi_screener.py` | `chainaware-gamefi-screener.md` |
+| `wallet_marketer_batch.py` | `chainaware-wallet-marketer.md` |
 
 ## Agent Definitions
 
@@ -200,6 +201,8 @@ python python/agents/rwa_investor_screener.py wallets.csv ETH moderate '$50,000'
 python python/agents/trust_scorer.py wallets.csv ETH
 python python/agents/upsell_advisor.py wallets.csv ETH "basic DEX swap" retention
 python python/agents/wallet_marketer.py wallets.csv ETH
+python python/agents/wallet_marketer_batch.py wallets.csv ETH results.csv
+python python/agents/wallet_marketer_batch.py wallets.csv ETH results.csv Aave
 python python/agents/wallet_ranker.py wallets.csv ETH
 python python/agents/whale_detector.py wallets.csv ETH
 

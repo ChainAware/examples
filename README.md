@@ -162,6 +162,7 @@ python python/agents/transaction_monitor.py 0xSENDER... 0xRECEIVER... ETH "" "2.
 | `ltv_estimator.py` | `chainaware-ltv-estimator.md` | CSV + network | Estimates 12-month revenue potential per wallet, with ranked summary and total |
 | `sybil_detector.py` | `chainaware-sybil-detector.md` | CSV + network + proposal | Screens DAO voter list for Sybil attacks, classifies ELIGIBLE / REVIEW / EXCLUDE |
 | `gamefi_screener.py` | `chainaware-gamefi-screener.md` | CSV + network | Detects bots/farm wallets, classifies players into tiers, calculates P2E reward eligibility |
+| `wallet_marketer_batch.py` | `chainaware-wallet-marketer.md` | CSV + network + output CSV | Generates a personalized 20-word marketing message per wallet and writes results to a CSV |
 
 ```bash
 python python/agents/airdrop_screener.py wallets.csv ETH
@@ -169,6 +170,8 @@ python python/agents/cohort_analyzer.py wallets.csv ETH retention
 python python/agents/ltv_estimator.py wallets.csv ETH
 python python/agents/sybil_detector.py voters.csv ETH "Proposal #42"
 python python/agents/gamefi_screener.py players.csv ETH "MyGame" 500
+python python/agents/wallet_marketer_batch.py wallets.csv ETH results.csv
+python python/agents/wallet_marketer_batch.py wallets.csv ETH results.csv Aave
 ```
 
 ---
