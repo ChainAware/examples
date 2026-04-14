@@ -9,18 +9,19 @@ wallet into an active user. Every message is derived from the wallet's real on-c
 behavior — no generic copy.
 
 Usage — single:
-    python python/agents/wallet_marketer.py <address> <network>
+    python python/agents/wallet_marketer.py <address> <network> [platform]
 
 Usage — batch:
-    python python/agents/wallet_marketer.py <csv_file> <network>
+    python python/agents/wallet_marketer.py <csv_file> <network> [platform]
 
     address   A single wallet address (0x...)
     csv_file  Path to a CSV file with wallet addresses
     network   Blockchain network (ETH, BNB, BASE, HAQQ, SOLANA)
+    platform  Target platform name (e.g. Uniswap, Aave, OpenSea) — optional
 
 Examples:
-    python python/agents/wallet_marketer.py 0xd8da6bf26964af9d7eed9e03e53415d37aa96045 ETH
-    python python/agents/wallet_marketer.py wallets.csv ETH
+    python python/agents/wallet_marketer.py 0xd8da6bf26964af9d7eed9e03e53415d37aa96045 ETH Aave
+    python python/agents/wallet_marketer.py wallets.csv ETH Uniswap
 
 Setup:
     pip install anthropic
@@ -90,7 +91,7 @@ def load_addresses_from_csv(csv_path: str) -> list[str]:
     return addresses
 
 
-def generate_marketing(addresses: list[str], network: str) -> str:
+def generate_marketing(addresses: list[str], network: str, platform: str = "") -> str:
     """
     Generate personalized marketing messages for one or more wallets.
     Behaviour is driven by the chainaware-wallet-marketer.md agent definition.
@@ -98,13 +99,16 @@ def generate_marketing(addresses: list[str], network: str) -> str:
     log.info("Starting wallet marketing — %d address(es) network=%s", len(addresses), network)
     model, system_prompt = load_agent(AGENT_MD)
 
+    platform_line = f"Target platform: {platform}\n" if platform else ""
+
     if len(addresses) == 1:
-        body = f"Generate a personalized marketing message for this wallet.\n\nAddress: {addresses[0]}\nNetwork: {network}\n"
+        body = f"Generate a personalized marketing message for this wallet.\n\nAddress: {addresses[0]}\nNetwork: {network}\n{platform_line}"
     else:
         address_list = "\n".join(f"- {addr}" for addr in addresses)
         body = (
             f"Generate personalized marketing messages for these wallets.\n\n"
             f"Network: {network}\n"
+            f"{platform_line}"
             f"Wallet addresses ({len(addresses)} total):\n{address_list}\n"
         )
     body += f"API Key: {chainaware.api_key()}"
@@ -121,8 +125,9 @@ def generate_marketing(addresses: list[str], network: str) -> str:
 
 if __name__ == "__main__":
     if len(sys.argv) >= 3:
-        target  = sys.argv[1]
-        network = sys.argv[2].upper()
+        target   = sys.argv[1]
+        network  = sys.argv[2].upper()
+        platform = sys.argv[3] if len(sys.argv) >= 4 else ""
         if os.path.isfile(target):
             addresses = load_addresses_from_csv(target)
             log.info("=== Wallet Marketer starting (batch: %d wallets) ===", len(addresses))
@@ -134,13 +139,16 @@ if __name__ == "__main__":
     else:
         addresses = [DEMO_ADDRESS]
         network   = DEMO_NETWORK
+        platform  = ""
         log.info("=== Wallet Marketer starting (demo) ===")
         print(f"Generating message for: {DEMO_ADDRESS} (demo)")
 
     print(f"Network: {network}")
+    if platform:
+        print(f"Platform: {platform}")
     print("=" * 60)
 
-    report = generate_marketing(addresses, network)
+    report = generate_marketing(addresses, network, platform)
     print(report)
 
     log.info("=== Wallet Marketer done ===")

@@ -8,12 +8,24 @@ the MCP tools available.
 
 import os
 import logging
+import httpx
 import anthropic
 
 log = logging.getLogger(__name__)
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 CHAINAWARE_API_KEY = os.environ["CHAINAWARE_API_KEY"]
+ETHERSCAN_API_KEY = os.environ.get("ETHERSCAN_API_KEY", "")
+
+# Etherscan V2 — one base URL, differentiated by chainid.
+EXPLORERS: dict[str, dict] = {
+    "ETH":     {"chainid": 1,      "url": "https://api.etherscan.io/v2/api"},
+    "BNB":     {"chainid": 56,     "url": "https://api.etherscan.io/v2/api"},
+    "BASE":    {"chainid": 8453,   "url": "https://api.etherscan.io/v2/api"},
+    "POLYGON": {"chainid": 137,    "url": "https://api.etherscan.io/v2/api"},
+    "ARB":     {"chainid": 42161,  "url": "https://api.etherscan.io/v2/api"},
+    "HAQQ":    {"chainid": 11235,  "url": "https://api.etherscan.io/v2/api"},
+}
 
 # The ChainAware MCP server — API key embedded in the URL for connection auth.
 # Each tool also receives the API key explicitly in the prompt.
@@ -57,3 +69,44 @@ def run(prompt: str, system: str = None, model: str = "claude-opus-4-6", max_tok
 def api_key() -> str:
     """Return the ChainAware API key for injecting into prompts."""
     return CHAINAWARE_API_KEY
+
+
+async def is_contract(address: str, chain: str) -> dict:
+    """
+    Return whether *address* is a smart contract or an EOA wallet on *chain*.
+
+    Uses the Etherscan V2 API (eth_getCode).  A non-empty bytecode response
+    means the address is a contract; "0x" means it is a plain wallet.
+
+    Requires ETHERSCAN_API_KEY in the environment.
+    Supported chains: ETH, BNB, BASE, POLYGON, ARB, HAQQ.
+    """
+    chain = chain.upper()
+
+    if chain not in EXPLORERS:
+        raise ValueError(f"Unsupported chain: {chain}. Supported: {list(EXPLORERS.keys())}")
+
+    explorer = EXPLORERS[chain]
+
+    params = {
+        "chainid": explorer["chainid"],
+        "module": "proxy",
+        "action": "eth_getCode",
+        "address": address,
+        "tag": "latest",
+        "apikey": ETHERSCAN_API_KEY,
+    }
+
+    async with httpx.AsyncClient() as http:
+        response = await http.get(explorer["url"], params=params)
+        data = response.json()
+
+    bytecode = data.get("result", "0x")
+    is_ctr = bytecode not in ("0x", "0x0", None, "")
+
+    return {
+        "address": address,
+        "chain": chain,
+        "is_contract": is_ctr,
+        "type": "contract" if is_ctr else "wallet",
+    }

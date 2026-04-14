@@ -52,14 +52,19 @@ def screen_transaction(
     network: str,
     value: str = None,
     tx_type: str = None,
+    receiver_type: str = None,
 ) -> str:
     """
     Run a transaction compliance check against sender and receiver wallets.
     Behaviour is driven by the chainaware-compliance-screener.md agent definition.
+
+    receiver_type: "wallet" — EOA, uses fraud check
+                   "contract" — smart contract, uses rug pull check
+                   None (default) — inferred from tx_type by the agent
     """
     log.info(
-        "Starting transaction compliance check — sender=%s receiver=%s network=%s",
-        sender, receiver, network,
+        "Starting transaction compliance check — sender=%s receiver=%s (%s) network=%s",
+        sender, receiver, receiver_type or "inferred", network,
     )
 
     model, system_prompt = load_agent(AGENT_MD)
@@ -74,6 +79,8 @@ def screen_transaction(
         lines.append(f"Transaction Value: {value}")
     if tx_type:
         lines.append(f"Transaction Type: {tx_type}")
+    if receiver_type:
+        lines.append(f"Receiver Type: {receiver_type}")
     lines.append(f"API Key: {chainaware.api_key()}")
 
     user_message = "\n".join(lines)
@@ -90,22 +97,35 @@ def screen_transaction(
 
 
 if __name__ == "__main__":
-    # Transaction check: a transfer from one ETH wallet to another, above Travel Rule threshold
-    sender   = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045"  # vitalik.eth
-    receiver = "0x388c818ca8b9251b393131c08a736a67ccb19297"  # Lido operator
-    network  = "ETH"
-    value    = "$5,000"
-    tx_type  = "transfer"
+    # Usage: compliance_screener.py [sender receiver network [value [tx_type [receiver_type]]]]
+    # receiver_type: "wallet" or "contract" — omit to let agent infer from tx_type
+    args = sys.argv[1:]
+    if len(args) >= 3:
+        sender        = args[0]
+        receiver      = args[1]
+        network       = args[2]
+        value         = args[3] if len(args) >= 4 else None
+        tx_type       = args[4] if len(args) >= 5 else None
+        receiver_type = args[5] if len(args) >= 6 else None
+    else:
+        # Hardcoded defaults: transfer between two wallets, above Travel Rule threshold
+        sender        = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045"  # vitalik.eth
+        receiver      = "0x388c818ca8b9251b393131c08a736a67ccb19297"  # Lido operator
+        network       = "ETH"
+        value         = "$5,000"
+        tx_type       = "transfer"
+        receiver_type = None  # agent will infer "wallet" from tx_type=transfer
 
     log.info("=== Compliance Screener (transaction) starting ===")
-    print(f"Sender:   {sender}")
-    print(f"Receiver: {receiver}")
-    print(f"Network:  {network}")
-    print(f"Value:    {value}")
-    print(f"Type:     {tx_type}\n")
+    print(f"Sender:        {sender}")
+    print(f"Receiver:      {receiver}")
+    print(f"Receiver type: {receiver_type or '(infer from tx_type)'}")
+    print(f"Network:       {network}")
+    print(f"Value:         {value or '(not specified)'}")
+    print(f"Type:          {tx_type or '(not specified)'}\n")
     print("=" * 60)
 
-    report = screen_transaction(sender, receiver, network, value=value, tx_type=tx_type)
+    report = screen_transaction(sender, receiver, network, value=value, tx_type=tx_type, receiver_type=receiver_type)
     print(report)
 
     log.info("=== Compliance Screener done ===")
