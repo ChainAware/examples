@@ -60,9 +60,6 @@ AGENT_MD = os.path.join(
 DEMO_PORTFOLIO = [
     {"contract": "0xdAC17F958D2ee523a2206206994597C13D831ec7", "network": "ETH", "position_usd": "8000"},   # USDT
     {"contract": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599", "network": "ETH", "position_usd": "6000"},   # WBTC
-    {"contract": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", "network": "ETH", "position_usd": "5000"},   # WETH
-    {"contract": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", "network": "BNB", "position_usd": "3000"},   # WBNB
-    {"contract": "0x4200000000000000000000000000000000000006", "network": "BASE", "position_usd": "3000"},   # WETH on BASE
 ]
 
 
@@ -132,6 +129,7 @@ def assess_portfolio(portfolio: list[dict], risk_tolerance: str = "standard") ->
     )
 
     model, system_prompt = load_agent(AGENT_MD)
+    model = "claude-haiku-4-5-20251001"  # agent MD specifies Sonnet; override for speed
 
     has_positions = any("position_usd" in t for t in portfolio)
 

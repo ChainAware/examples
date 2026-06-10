@@ -159,6 +159,7 @@ def run_batch(
     log.info("Loaded %d addresses from %s", len(addresses), csv_path)
 
     model, system_prompt = load_agent(AGENT_MD)
+    model = "claude-haiku-4-5-20251001"  # agent MD specifies Sonnet; override for speed
     log.info("Agent loaded — model=%s", model)
 
     results = []

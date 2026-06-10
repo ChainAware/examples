@@ -228,8 +228,7 @@ python python/MCP/token_ranker.py
 ## Running All Examples
 
 `python/scripts/run_all_examples.py` runs every example script sequentially and prints a
-summary table (script, status, duration, tokens consumed). A 3-second pause is inserted
-between consecutive scripts to avoid saturating the MCP SSE connection.
+summary table (script, status, duration, tokens consumed).
 
 ```bash
 python python/scripts/run_all_examples.py
@@ -237,14 +236,26 @@ python python/scripts/run_all_examples.py
 
 ## Rate Limiting
 
-The ChainAware MCP server enforces rate limits server-side. Two mitigations are in place:
+The ChainAware MCP server enforces rate limits server-side. Several mitigations are in place:
 
-- **`run_all_examples.py`** — waits 3 seconds between each script run when running the full suite.
+- **`run_all_examples.py`** — waits 3 seconds between scripts; waits 30 seconds after any script that times out, to let the MCP SSE connection clear before the next script.
 - **`wallet_marketer_batch.py`** — waits 3 seconds between each per-wallet `chainaware.run()` call, since it is the only batch script that makes one API call per wallet rather than one call for the whole list.
+- **`wallets.csv`** — trimmed to 3 wallets for the demo suite. Scripts that call multiple MCP tools per wallet scale linearly, so a large CSV will time out.
 
 The other CSV batch scripts (`airdrop_screener`, `cohort_analyzer`, `ltv_estimator`, etc.)
 send all wallets in a single `chainaware.run()` call — rate limiting inside that call is
 handled by the MCP server.
+
+## Model Overrides
+
+Three agent MD files specify `claude-sonnet-4-6`. The corresponding scripts override this
+to `claude-haiku-4-5-20251001` after `load_agent()` to keep demo runs within the 120s timeout:
+
+| Script | Reason |
+|--------|--------|
+| `portfolio_risk_advisor.py` | Sonnet + 2 tools per token is too slow for demo |
+| `marketing_director.py` | Sonnet + multiple subagent orchestration is too slow |
+| `wallet_marketer_batch.py` | Sonnet + per-wallet loop would exceed 120s |
 
 ## Environment Variables
 

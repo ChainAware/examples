@@ -94,7 +94,18 @@ def _parse_tokens(text: str) -> int:
 
 
 def _first_output_line(text: str) -> str:
-    for line in text.splitlines():
+    lines = text.splitlines()
+    # First pass: look for the actual exception line (last non-empty line of a traceback)
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if stripped.startswith("Traceback (most recent call last)"):
+            # Return the last non-empty line of the traceback block
+            for candidate in reversed(lines[i:]):
+                c = candidate.strip()
+                if c and not c.startswith("File ") and not c.startswith("Traceback"):
+                    return c[:80]
+    # Second pass: first meaningful non-log line
+    for line in lines:
         line = line.strip()
         if not line:
             continue
@@ -155,6 +166,7 @@ if __name__ == "__main__":
         print(f"  {icon}{dur}")
         results.append((label, res))
         if i < total:
-            time.sleep(3)
+            pause = 30 if res["status"] == "TIMEOUT" else 3
+            time.sleep(pause)
 
     print_summary(results)

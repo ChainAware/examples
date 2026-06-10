@@ -51,8 +51,8 @@ AGENT_MD = os.path.join(
 )
 
 # Demo: WETH contract + vitalik.eth as deployer (illustrative only)
-DEMO_CONTRACT = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"   # WETH on ETH
-DEMO_DEPLOYER = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045"   # vitalik.eth
+DEMO_CONTRACT = "0x798d1be841a82a273720ce31c822c61a67a601c3"
+DEMO_DEPLOYER = "0xDA25ee226E534d868f0Dd8a459536b03fEE9079b"
 DEMO_NETWORK  = "ETH"
 
 
@@ -81,7 +81,9 @@ def audit_launch(contract: str, deployer: str, network: str) -> str:
         f"Contract: {contract}\n"
         f"Deployer: {deployer}\n"
         f"Network:  {network}\n"
-        f"API Key: {chainaware.api_key()}"
+        f"API Key: {chainaware.api_key()}\n\n"
+        f"Note: do not call predictive_fraud on the deployer — "
+        f"fraud probability is already contained in the predictive_behaviour response."
     )
 
     log.info("Calling token launch auditor (model=%s)", model)
@@ -105,7 +107,6 @@ if __name__ == "__main__":
         deployer = DEMO_DEPLOYER
         network  = DEMO_NETWORK
         log.info("=== Token Launch Auditor starting (demo) ===")
-        print("Note: demo uses WETH contract + vitalik.eth as deployer (illustrative)")
 
     print(f"Contract: {contract}")
     print(f"Deployer: {deployer}")

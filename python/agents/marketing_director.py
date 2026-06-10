@@ -129,6 +129,7 @@ def run_campaign(
     )
 
     model, system_prompt = load_agent(AGENT_MD)
+    model = "claude-haiku-4-5-20251001"  # agent MD specifies Sonnet; override for speed
 
     if len(addresses) == 1:
         body = f"Create a wallet marketing profile for this address.\n\nAddress: {addresses[0]}\nNetwork: {network}\n"

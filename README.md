@@ -201,7 +201,7 @@ python python/agents/wallet_marketer_batch.py wallets.csv ETH results.csv Aave
 
 | Script | What it does |
 |--------|-------------|
-| `run_all_examples.py` | Runs every example script sequentially and prints a summary table (status, duration, tokens consumed). Inserts a 3-second pause between scripts to avoid saturating the MCP SSE connection. |
+| `run_all_examples.py` | Runs every example script sequentially and prints a summary table (status, duration, tokens consumed). Waits 3s between scripts and 30s after any timeout to let the MCP SSE connection recover. |
 
 ```bash
 python python/scripts/run_all_examples.py

@@ -110,7 +110,7 @@ if __name__ == "__main__":
     else:
         # Hardcoded defaults: transfer between two wallets, above Travel Rule threshold
         sender        = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045"  # vitalik.eth
-        receiver      = "0x388c818ca8b9251b393131c08a736a67ccb19297"  # Lido operator
+        receiver      = "0x648aa14e4424e0825a5ce739c8c68610e143fb79"  # sassal.eth
         network       = "ETH"
         value         = "$5,000"
         tx_type       = "transfer"

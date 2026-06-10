@@ -101,14 +101,17 @@ if __name__ == "__main__":
         agent_type    = args[3] if len(args) >= 4 else "wallet"
         feeder_type   = args[4] if len(args) >= 5 else "wallet"
     else:
-        # Hardcoded defaults
-        agent_wallet  = "0x388c818ca8b9251b393131c08a736a67ccb19297"  # Lido operator
-        feeder_wallet = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045"  # vitalik.eth
-        network       = "ETH"
+        # ERC-8004 agent ID=1 — agent and feeder are the same address (self-funded)
+        agent_wallet  = "0xab4ce88db0277e05cfb5eeb346f6dfb635950ed0"
+        feeder_wallet = "0xab4ce88db0277e05cfb5eeb346f6dfb635950ed0"
+        network       = "BNB"
         agent_type    = "wallet"
         feeder_type   = "wallet"
 
     log.info("=== Agent Screener starting ===")
+    if len(args) < 3:
+        print("ERC-8004 Agent ID=1")
+        print(f"Creator wallet: 0x89E9E1ab11dD1B138b1dcE6d6A4a0926aaFD5029")
     print(f"Agent wallet:  {agent_wallet} ({agent_type})")
     print(f"Feeder wallet: {feeder_wallet} ({feeder_type})")
     print(f"Network:       {network}\n")
