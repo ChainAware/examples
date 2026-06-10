@@ -15,6 +15,7 @@ log = logging.getLogger(__name__)
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 CHAINAWARE_API_KEY = os.environ["CHAINAWARE_API_KEY"]
+CHAINAWARE_MCP_URL = os.environ.get("CHAINAWARE_MCP_URL", "https://prediction.mcp.chainaware.ai/sse")
 ETHERSCAN_API_KEY = os.environ.get("ETHERSCAN_API_KEY", "")
 
 # Etherscan V2 — one base URL, differentiated by chainid.
@@ -31,7 +32,7 @@ EXPLORERS: dict[str, dict] = {
 # Each tool also receives the API key explicitly in the prompt.
 MCP_SERVER = {
     "type": "url",
-    "url": f"https://prediction.mcpbeta.chainaware.ai/sse?apiKey={CHAINAWARE_API_KEY}",
+    "url": f"{CHAINAWARE_MCP_URL}?apiKey={CHAINAWARE_API_KEY}",
     "name": "chainaware-behavioral-prediction",
 }
 

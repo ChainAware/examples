@@ -16,8 +16,8 @@ Usage:
     due_diligence   Optional: pass "fraud" to also screen top holders for fraud risk
 
 Examples:
-    python python/agents/token_analyzer.py 0xdAC17F958D2ee523a2206206994597C13D831ec7 ETH
-    python python/agents/token_analyzer.py 0xdAC17F958D2ee523a2206206994597C13D831ec7 ETH fraud
+    python python/agents/token_analyzer.py 0x616e8bfa43f920657b3497dbf40d6b1a02d4608d ETH
+    python python/agents/token_analyzer.py 0x616e8bfa43f920657b3497dbf40d6b1a02d4608d ETH fraud
 
 Setup:
     pip install anthropic
@@ -44,8 +44,8 @@ AGENT_MD = os.path.join(
     os.path.dirname(__file__), "..", "..", ".claude", "agents", "chainaware-token-analyzer.md"
 )
 
-# USDT on ETH
-DEMO_CONTRACT = "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+# Aura BAL on ETH
+DEMO_CONTRACT = "0x616e8bfa43f920657b3497dbf40d6b1a02d4608d"
 DEMO_NETWORK  = "ETH"
 
 
@@ -69,7 +69,7 @@ def analyze_token(contract: str, network: str, due_diligence: bool = False) -> s
              contract, network, due_diligence)
     model, system_prompt = load_agent(AGENT_MD)
 
-    body = f"Analyze the community rank and top holders of this token.\n\nContract: {contract}\nNetwork: {network}\n"
+    body = f"Get the community rank and top holders for this token. Do not run fraud screening unless explicitly asked.\n\nContract: {contract}\nNetwork: {network}\n"
     if due_diligence:
         body += "Also run fraud screening on the top holders for due diligence.\n"
     body += f"API Key: {chainaware.api_key()}"
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         network       = DEMO_NETWORK
         due_diligence = False
         log.info("=== Token Analyzer starting (demo) ===")
-        print(f"Analyzing token: {DEMO_CONTRACT} (USDT, demo)")
+        print(f"Analyzing token: {DEMO_CONTRACT} (Aura BAL, demo)")
 
     print(f"Network:       {network}")
     if due_diligence:

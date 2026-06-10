@@ -180,6 +180,9 @@ if __name__ == "__main__":
     print("=" * 60)
 
     report = estimate_ltv(csv_file, network, platform_share, fee_rate)
-    print(report)
+
+    from rich.console import Console
+    from rich.markdown import Markdown
+    Console().print(Markdown(report))
 
     log.info("=== LTV Estimator done ===")

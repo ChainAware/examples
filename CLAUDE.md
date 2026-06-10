@@ -5,6 +5,7 @@
 ```
 python/MCP/        Direct MCP examples (call tools via user prompt)
 python/agents/     Agent-based examples (load .md as system prompt)
+python/scripts/    Utility scripts (run_all_examples.py)
 python/chainaware.py  Shared helper — imported by all scripts
 .claude/agents/    32 agent definitions pulled from behavioral-prediction-mcp repo
 ```
@@ -127,8 +128,9 @@ else:
 | Script | Agent |
 |--------|-------|
 | `token_analyzer.py` | `chainaware-token-analyzer.md` |
+| `token_ranker_single.py` | `chainaware-token-analyzer.md` |
 | `token_launch_auditor.py` | `chainaware-token-launch-auditor.md` |
-| `token_ranker.py` | `chainaware-token-ranker.md` |
+| `token_ranker_list.py` | `chainaware-token-ranker.md` |
 | `transaction_monitor.py` | `chainaware-transaction-monitor.md` |
 
 ### CSV batch only
@@ -140,6 +142,7 @@ else:
 | `ltv_estimator.py` | `chainaware-ltv-estimator.md` |
 | `sybil_detector.py` | `chainaware-sybil-detector.md` |
 | `gamefi_screener.py` | `chainaware-gamefi-screener.md` |
+| `portfolio_risk_advisor.py` | `chainaware-portfolio-risk-advisor.md` |
 | `wallet_marketer_batch.py` | `chainaware-wallet-marketer.md` |
 
 ## Agent Definitions
@@ -192,6 +195,8 @@ python python/agents/cohort_analyzer.py wallets.csv ETH retention
 python python/agents/ltv_estimator.py wallets.csv ETH
 python python/agents/sybil_detector.py voters.csv ETH "Proposal #42"
 python python/agents/gamefi_screener.py players.csv ETH "MyGame" 500
+python python/agents/portfolio_risk_advisor.py portfolio.csv
+python python/agents/portfolio_risk_advisor.py portfolio.csv conservative
 python python/agents/governance_screener.py wallets.csv ETH reputation-weighted 10000
 python python/agents/lead_scorer.py wallets.csv ETH "DeFi lending" acquisition
 python python/agents/lending_risk_assessor.py wallets.csv ETH conservative
@@ -208,8 +213,10 @@ python python/agents/whale_detector.py wallets.csv ETH
 
 # unique input patterns
 python python/agents/token_analyzer.py 0xCONTRACT... ETH
+python python/agents/token_ranker_single.py 0xa0820613976b441e2c6a90e4877e2fb5f7d72552 BASE
+python python/agents/token_ranker_single.py 0xCONTRACT... ETH
 python python/agents/token_launch_auditor.py 0xCONTRACT... 0xDEPLOYER... ETH
-python python/agents/token_ranker.py ETH "DeFi Token" 10
+python python/agents/token_ranker_list.py ETH "DeFi Token" 10
 python python/agents/transaction_monitor.py 0xSENDER... 0xRECEIVER... ETH
 
 # MCP direct
@@ -217,6 +224,27 @@ python python/MCP/fraud_detector.py
 python python/MCP/rug_pull_checker.py
 python python/MCP/token_ranker.py
 ```
+
+## Running All Examples
+
+`python/scripts/run_all_examples.py` runs every example script sequentially and prints a
+summary table (script, status, duration, tokens consumed). A 3-second pause is inserted
+between consecutive scripts to avoid saturating the MCP SSE connection.
+
+```bash
+python python/scripts/run_all_examples.py
+```
+
+## Rate Limiting
+
+The ChainAware MCP server enforces rate limits server-side. Two mitigations are in place:
+
+- **`run_all_examples.py`** — waits 3 seconds between each script run when running the full suite.
+- **`wallet_marketer_batch.py`** — waits 3 seconds between each per-wallet `chainaware.run()` call, since it is the only batch script that makes one API call per wallet rather than one call for the whole list.
+
+The other CSV batch scripts (`airdrop_screener`, `cohort_analyzer`, `ltv_estimator`, etc.)
+send all wallets in a single `chainaware.run()` call — rate limiting inside that call is
+handled by the MCP server.
 
 ## Environment Variables
 

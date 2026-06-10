@@ -35,6 +35,7 @@ import logging
 import os
 import re
 import sys
+import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import chainaware
@@ -172,6 +173,8 @@ def run_batch(
             message = f"ERROR — {exc}"
         results.append({"address": address, "message": message})
         log.info("[%d/%d] Done: %s", i, len(addresses), message[:60])
+        if i < len(addresses):
+            time.sleep(3)
 
     with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=["address", "message"])

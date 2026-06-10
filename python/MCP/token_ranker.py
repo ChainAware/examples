@@ -111,9 +111,10 @@ if __name__ == "__main__":
 
     print()
 
-    # Example 2 — single token deep dive (Chainlink on ETH)
-    contract = "0x514910771AF9Ca656af840dff83E8264EcF986CA"
-    network = "ETH"
+    # Example 2 — single token deep dive
+    # contract = "0x514910771AF9Ca656af840dff83E8264EcF986CA"  # Chainlink on ETH (times out — too many holders)
+    contract = "0xa0820613976b441e2c6a90e4877e2fb5f7d72552"
+    network = "BASE"
     print(f"Single Token Rank: {contract} on {network}\n" + "=" * 60)
     report = rank_single_token(contract, network)
     print(report)

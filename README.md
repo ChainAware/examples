@@ -152,16 +152,19 @@ python python/agents/whale_detector.py wallets.csv ETH
 | Script | Agent | Input | What it does |
 |--------|-------|-------|-------------|
 | `token_analyzer.py` | `chainaware-token-analyzer.md` | contract + network | Community rank + top holder profiles + holder quality assessment |
+| `token_ranker_single.py` | `chainaware-token-analyzer.md` | contract + network | Community rank + top holders for a single token (ranking-focused view) |
 | `token_launch_auditor.py` | `chainaware-token-launch-auditor.md` | contract + deployer + network | Launch Safety Score + APPROVED/CONDITIONAL/REJECTED verdict + safety badge |
-| `token_ranker.py` | `chainaware-token-ranker.md` | network + category | Top tokens ranked by holder community strength |
+| `token_ranker_list.py` | `chainaware-token-ranker.md` | network + category | Top tokens ranked by holder community strength |
 | `transaction_monitor.py` | `chainaware-transaction-monitor.md` | sender + receiver + network | Real-time risk signal: ALLOW / FLAG / HOLD / BLOCK |
 
 ```bash
 python python/agents/token_analyzer.py 0xCONTRACT... ETH
-python python/agents/token_analyzer.py 0xCONTRACT... ETH fraud        # also screen top holders
+python python/agents/token_analyzer.py 0xCONTRACT... ETH fraud
+python python/agents/token_ranker_single.py 0xa0820613976b441e2c6a90e4877e2fb5f7d72552 BASE
+python python/agents/token_ranker_single.py 0xCONTRACT... ETH        # also screen top holders
 python python/agents/token_launch_auditor.py 0xCONTRACT... 0xDEPLOYER... ETH
-python python/agents/token_ranker.py ETH "DeFi Token" 10
-python python/agents/token_ranker.py SOLANA "AI Token" 5
+python python/agents/token_ranker_list.py ETH "DeFi Token" 10
+python python/agents/token_ranker_list.py SOLANA "AI Token" 5
 python python/agents/transaction_monitor.py 0xSENDER... 0xRECEIVER... ETH
 python python/agents/transaction_monitor.py 0xSENDER... 0xRECEIVER... ETH "" "2.5 ETH" swap
 ```
@@ -190,6 +193,18 @@ python python/agents/portfolio_risk_advisor.py portfolio.csv             # defau
 python python/agents/portfolio_risk_advisor.py portfolio.csv conservative
 python python/agents/wallet_marketer_batch.py wallets.csv ETH results.csv
 python python/agents/wallet_marketer_batch.py wallets.csv ETH results.csv Aave
+```
+
+---
+
+### `python/scripts/` — Utilities
+
+| Script | What it does |
+|--------|-------------|
+| `run_all_examples.py` | Runs every example script sequentially and prints a summary table (status, duration, tokens consumed). Inserts a 3-second pause between scripts to avoid saturating the MCP SSE connection. |
+
+```bash
+python python/scripts/run_all_examples.py
 ```
 
 ---
