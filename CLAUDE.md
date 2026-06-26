@@ -1,5 +1,7 @@
 # ChainAware Examples — Claude Code Instructions
 
+> ChainAware is featured in the **[CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** — recognised as a leading AI-era fraud prevention solution for Web3.
+
 ## Project Structure
 
 ```

@@ -2,6 +2,8 @@
 
 Python examples showing how to use the [ChainAware Behavioral Prediction MCP](https://github.com/ChainAware/behavioral-prediction-mcp) with Claude.
 
+> **Featured in the [CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** — ChainAware is recognised as a leading solution in AI-era fraud prevention for Web3.
+
 ---
 
 ## Prerequisites
@@ -262,3 +264,9 @@ for f in json.load(sys.stdin):
 ## Supported Networks
 
 `ETH` · `BNB` · `POLYGON` · `BASE` · `TRON` · `TON` · `HAQQ` · `SOLANA`
+
+---
+
+## Recognition
+
+ChainAware is featured in the **[CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** as a leading AI-powered fraud prevention solution for Web3.
