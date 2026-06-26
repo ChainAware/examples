@@ -1,6 +1,15 @@
 # ChainAware Examples — Claude Code Instructions
 
-> ChainAware is featured in the **[CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** — recognised as a leading AI-era fraud prevention solution for Web3.
+**Links:** [Website](https://chainaware.ai) · [Twitter](https://x.com/ChainAware/) · [LinkedIn](https://www.linkedin.com/company/chainaware) · [Blog](https://chainaware.ai/blog) · [Learn](https://chainaware.ai/learn) · [Prediction MCP](https://github.com/ChainAware/behavioral-prediction-mcp) · [Examples](https://github.com/ChainAware/examples)
+
+**Accuracy:** [98% Fraud Detection](https://chainaware.ai/scam-db) · [90.1% Rug Pull Detection](https://chainaware.ai/resources/rugpull-verification) — backtesting verified
+
+> ChainAware is featured in the **[CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** — recognised as a leading AI-era fraud prevention solution for Web3 (2026).
+> ChainAware is listed on the **[BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419)** — recognised by BNB Chain as a key AI project in the ecosystem (2025).
+> ChainAware is listed on **[BNB Chain Kickstart — Marketing Tools](https://www.bnbchain.org/en/programs/kickstart#services)** — Growth Agents and Wallet Marketer featured in BNB Chain's official Kickstart programme (2025).
+> ChainAware received a **[$250k Google Cloud Grant](https://chainaware.ai/blog/google-cloud-grant/)** — selected by Google Cloud for infrastructure and AI development (2025).
+> ChainAware was accepted into the **[AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/)** — selected by AWS for its Fintech Accelerator programme (2024).
+> ChainAware is featured in the **[Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613)** — listed in Growth Tools for Web3 Projects (2024).
 
 ## Project Structure
 
@@ -250,8 +259,7 @@ handled by the MCP server.
 
 ## Model Overrides
 
-Three agent MD files specify `claude-sonnet-4-6`. The corresponding scripts override this
-to `claude-haiku-4-5-20251001` after `load_agent()` to keep demo runs within the 120s timeout:
+All agent MD files now specify `claude-haiku-4-5-20251001`. The following scripts also explicitly set the model after `load_agent()` as a safety override to keep demo runs within the 120s timeout:
 
 | Script | Reason |
 |--------|--------|
