@@ -13,7 +13,7 @@ description: >
   my airdrop list", "fair airdrop allocation for these addresses".
   Requires: list of wallet addresses + blockchain network. Optional: minimum reputation
   score threshold, maximum fraud probability cutoff, allocation budget (total tokens).
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour_batch, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
 model: claude-haiku-4-5-20251001
 ---
 
@@ -77,37 +77,28 @@ For every eligible wallet, calculate the reputation score using the standard
 ChainAware formula:
 
 ```
-Reputation Score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) × (1 - fraud_probability)
+Reputation Score = (1000 / 110) × (experience + 1) × (risk_capability + 1) × (1 - fraud_probability)
 ```
+
+Max score = 1000.
 
 ### Variable Mapping
 
 | Variable | Source | Extraction |
 |----------|--------|------------|
-| `experience` | `experience.Value` ÷ 10 | Normalize 0–10 → 0.00–1.00 |
-| `willingness_to_take_risk` | `riskProfile[].Category` | Map category to numeric (see below) |
+| `experience` | `experience.Value` | Raw integer 0–10 — do NOT normalize |
+| `risk_capability` | `riskCapability` | Raw integer 0–9 — direct field; default 2 if missing |
 | `fraud_probability` | `probabilityFraud` | Included in `predictive_behaviour` response |
-
-### Risk Category Mapping
-
-| riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
-|---------------------|---------------|----------------------------|
-| `Conservative` | 0–2 | 0.10 |
-| `Moderate` | 3–4 | 0.35 |
-| `Balanced` | 5–6 | 0.55 |
-| `Aggressive` | 7–8 | 0.75 |
-| `Very Aggressive` / `High Risk` | 9–10 | 0.95 |
-| Missing / unavailable | — | 0.25 (default) |
 
 ### Score Tiers
 
 | Score | Tier | Allocation Multiplier |
 |-------|------|-----------------------|
-| 3000–4000 | 🥇 Elite | 4× base allocation |
-| 2000–2999 | 🥈 Power User | 3× base allocation |
-| 1000–1999 | 🥉 Active User | 2× base allocation |
-| 500–999 | ⬜ Regular User | 1× base allocation |
-| 0–499 | 🔵 Low Score | 0.5× base allocation |
+| 751–1000 | 🥇 Elite | 4× base allocation |
+| 501–750 | 🥈 Power User | 3× base allocation |
+| 251–500 | 🥉 Active User | 2× base allocation |
+| 126–250 | ⬜ Regular User | 1× base allocation |
+| 0–125 | 🔵 Low Score | 0.5× base allocation |
 
 ---
 
@@ -130,15 +121,30 @@ If no budget is provided, output multipliers only and let the project apply them
 ## Your Workflow
 
 1. **Receive** list of wallet addresses + network (+ optional: fraud threshold, token budget)
-2. **For each wallet:**
-   a. Run `predictive_behaviour` — extract experience, riskProfile, categories, `probabilityFraud`, and `forensic_details` in a single call
-      (For POLYGON, TON, TRON networks, call `predictive_fraud` only — skip reputation scoring)
-   b. Apply disqualification rules using fraud fields from the response
-   c. If not disqualified, calculate reputation score
-   d. Assign tier and allocation multiplier
-3. **Sort** eligible wallets by reputation score (descending)
-4. **Calculate** token allocations if budget provided
-5. **Return** full screening report
+2. **Choose approach based on list size:**
+   - **< 5 wallets** → call `predictive_behaviour` per wallet in a loop (immediate, no polling needed)
+   - **5+ wallets** → use batch tools (see **Batch Workflow** below)
+3. **For each wallet result** (whether from loop or batch):
+   - Apply disqualification rules using fraud fields from the response
+   - If not disqualified, calculate reputation score
+   - Assign tier and allocation multiplier
+4. **Sort** eligible wallets by reputation score (descending)
+5. **Calculate** token allocations if budget provided
+6. **Return** full screening report
+
+---
+
+## Batch Workflow (5+ Wallets)
+
+1. **Schedule** — call `predictive_behaviour_batch` with the full `addresses` array and `network`
+   (For POLYGON, TON, TRON networks, call `predictive_fraud_batch` instead — skip reputation scoring)
+2. **Store** both `job_id` and `signature` from the response — required for all follow-up calls
+3. **Poll** — call `check_job_status` with `job_id` + `signature` until status is `completed` or `partial`
+   - If `pending` or `processing` → wait and retry
+   - If `partial` → some wallets failed; proceed with the completed subset and note the failures
+4. **Retrieve** — call `get_job_results` with `job_id` + `signature`
+5. **Process** — apply disqualification rules and reputation scoring to each wallet in `data[]`
+6. **Sort and report** using the standard output format
 
 ---
 
@@ -157,11 +163,11 @@ If no budget is provided, output multipliers only and let the project apply them
 
 | Rank | Wallet | Reputation Score | Tier | Experience | Risk Profile | Fraud Prob | Multiplier | Allocation |
 |------|--------|-----------------|------|------------|--------------|------------|------------|------------|
-| 1 | 0xABC... | 3,241 | 🥇 Elite | 9.1/10 | Aggressive | 0.01 | 4× | [X tokens] |
-| 2 | 0xDEF... | 2,156 | 🥈 Power User | 7.4/10 | Balanced | 0.03 | 3× | [X tokens] |
-| 3 | 0xGHI... | 1,489 | 🥉 Active User | 5.5/10 | Moderate | 0.08 | 2× | [X tokens] |
-| 4 | 0xJKL... | 743 | ⬜ Regular | 3.8/10 | Conservative | 0.05 | 1× | [X tokens] |
-| 5 | 0xMNO... | 312 | 🔵 Low Score | 1.8/10 | Conservative | 0.12 | 0.5× | [X tokens] |
+| 1 | 0xABC... | 812 | 🥇 Elite | 9/10 Expert | Aggressive | 0.01 | 4× | [X tokens] |
+| 2 | 0xDEF... | 617 | 🥈 Power User | 7/10 Experienced | Balanced | 0.03 | 3× | [X tokens] |
+| 3 | 0xGHI... | 372 | 🥉 Active User | 5/10 Experienced | Moderate | 0.08 | 2× | [X tokens] |
+| 4 | 0xJKL... | 182 | ⬜ Regular | 3/10 Intermediate | Conservative | 0.05 | 1× | [X tokens] |
+| 5 | 0xMNO... | 74 | 🔵 Low Score | 1/10 Beginner | Conservative | 0.12 | 0.5× | [X tokens] |
 
 ---
 
@@ -263,8 +269,9 @@ Always state which thresholds were applied at the top of the report.
 - Deduplicate before screening
 - Note: *"[N] duplicate addresses removed before screening"*
 
-**Large batches (50+ wallets)**
-- Process all wallets but note that results may take longer
+**Large batches (5+ wallets)**
+- Use the batch workflow above — do not loop through single-wallet calls for large lists
+- If `check_job_status` returns `partial`, note how many wallets failed and proceed with completed results
 - Output the same format; do not truncate the results
 
 ---

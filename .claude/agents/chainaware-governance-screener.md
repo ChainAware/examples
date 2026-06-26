@@ -16,7 +16,7 @@ description: >
   Requires: wallet address (or list) + blockchain network.
   Optional: governance model (token-weighted / reputation-weighted / quadratic),
   total voting power pool, minimum participation threshold.
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour_batch, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
 model: claude-haiku-4-5-20251001
 ---
 
@@ -123,20 +123,11 @@ If the user specifies a governance model, adapt the output:
 - Note: *"Apply this multiplier to the wallet's token holdings when calculating final voting power"*
 
 ### Reputation-Weighted
-- Use the ChainAware Reputation Score directly as the weight:
+- Use the ChainAware Reputation Score directly as the weight (max = 1000):
   ```
-  Reputation Score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) × (1 - fraud_probability)
+  Reputation Score = (1000 / 110) × (experience + 1) × (risk_capability + 1) × (1 - fraud_probability)
   ```
-  Where `willingness_to_take_risk` maps from `riskProfile`:
-
-  | riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
-  |---------------------|---------------|----------------------------|
-  | Conservative | 0–2 | 0.10 |
-  | Moderate | 3–4 | 0.35 |
-  | Balanced | 5–6 | 0.55 |
-  | Aggressive | 7–8 | 0.75 |
-  | Very Aggressive / High Risk | 9–10 | 0.95 |
-  | Missing / unavailable | — | 0.25 |
+  Where `experience` = `experience.Value` raw (0–10) and `risk_capability` = `riskCapability` raw (0–9) — both direct fields from `predictive_behaviour`. Default `risk_capability = 2` if missing.
 
 - Output the raw reputation score alongside the tier
 
@@ -187,8 +178,20 @@ governance participant.]
 
 ## Batch Mode (DAO Voter List)
 
-For screening a full voter list before a snapshot or proposal, process each wallet
-and return a ranked governance leaderboard:
+For screening a full voter list, choose the approach based on list size:
+- **< 5 wallets** → call `predictive_behaviour` per wallet in a loop, then apply the screening workflow to each result
+- **5+ wallets** → use the batch pipeline below before applying the screening workflow
+
+### Batch Pipeline (5+ Wallets)
+
+1. **Schedule** — call `predictive_behaviour_batch` with the full `addresses` array and `network`
+   (For POLYGON, TON, TRON networks, call `predictive_fraud_batch` instead — apply fraud gate only)
+2. **Store** both `job_id` and `signature` — required for all follow-up calls
+3. **Poll** — call `check_job_status` with `job_id` + `signature` until status is `completed` or `partial`
+4. **Retrieve** — call `get_job_results` with `job_id` + `signature`
+5. **Apply** the full screening workflow (Steps 1–4) to each wallet in `data[]`
+
+Return a ranked governance leaderboard:
 
 ```
 ## Governance Screening Report — [N] wallets on [network]
@@ -204,13 +207,13 @@ and return a ranked governance leaderboard:
 
 | Wallet | Experience | Fraud Prob | Protocols | Multiplier | Rep Score |
 |--------|------------|------------|-----------|------------|-----------|
-| 0xABC... | 9.2/10 | 0.01 | 8 | 2.0× | 3,241 |
+| 0xABC... | 9/10 Expert | 0.01 | 8 | 2.0× | 812 |
 
 #### ✅ Active Members ([N] wallets)
 
 | Wallet | Experience | Fraud Prob | Protocols | Multiplier | Rep Score |
 |--------|------------|------------|-----------|------------|-----------|
-| 0xDEF... | 6.7/10 | 0.08 | 4 | 1.5× | 1,876 |
+| 0xDEF... | 6/10 Experienced | 0.08 | 4 | 1.5× | 430 |
 
 #### ✅ Participants ([N] wallets)
 ...
@@ -271,9 +274,10 @@ Output an allocation column in the batch table.
 - Run fraud gate only
 - Assign passing wallets to Participant tier (1.0×) with note: *"Behaviour data unavailable for [network] — tier based on fraud gate only"*
 
-**Very large DAO (500+ wallets)**
-- Process all wallets, output the same format
-- Recommend: *"For DAOs of this size, consider setting a minimum experience threshold (e.g. ≥ 2) to automatically filter Observers and focus governance on active members"*
+**Very large DAO (5+ wallets)**
+- Use the batch pipeline in Batch Mode — do not loop through single-wallet calls for large lists
+- If `check_job_status` returns `partial`, treat failed wallets as Observer tier with a note
+- For 500+ wallets: also recommend *"Consider setting a minimum experience threshold (e.g. ≥ 2) to automatically filter Observers and focus governance on active members"*
 
 ---
 
