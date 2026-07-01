@@ -70,9 +70,9 @@ def check_rug_pull(contract_address: str, network: str) -> str:
 
 
 if __name__ == "__main__":
-    # Uniswap V2: USDC/ETH pair contract
-    contract = "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc"
-    network = "ETH"
+    # Uniswap V2: USDC/ETH pair contract (defaults)
+    contract = sys.argv[1] if len(sys.argv) > 1 else "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc"
+    network = sys.argv[2] if len(sys.argv) > 2 else "ETH"
 
     log.info("=== Rug Pull Checker starting ===")
     print(f"Checking contract: {contract} on {network}\n")
