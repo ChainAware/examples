@@ -60,7 +60,7 @@ def rank_tokens(network: str, category: str, limit: int = 10) -> str:
     )
 
     log.info("Calling token_rank_list via ChainAware MCP")
-    result = chainaware.run(prompt)
+    result = chainaware.run_direct(prompt)
 
     if not result:
         log.warning("No result returned from token_rank_list")
@@ -91,7 +91,7 @@ def rank_single_token(contract_address: str, network: str) -> str:
     )
 
     log.info("Calling token_rank_single via ChainAware MCP")
-    result = chainaware.run(prompt)
+    result = chainaware.run_direct(prompt)
 
     if not result:
         log.warning("No result returned from token_rank_single")

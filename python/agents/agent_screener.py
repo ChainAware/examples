@@ -43,7 +43,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-haiku-4-5-20251001"
-    return model, body
+    return model, body, frontmatter
 
 
 def screen_agent(
@@ -67,7 +67,7 @@ def screen_agent(
         agent_wallet, agent_type, feeder_wallet, feeder_type, network,
     )
 
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     user_message = (
         f"Screen this agent.\n\n"
@@ -80,7 +80,7 @@ def screen_agent(
     )
 
     log.info("Calling agent screener (model=%s)", model)
-    result = chainaware.run(user_message, system=system_prompt, model=model)
+    result = chainaware.run(user_message, system=system_prompt, model=model,frontmatter=frontmatter)
 
     if not result:
         log.warning("No text block found in response content")

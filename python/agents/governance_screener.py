@@ -63,7 +63,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-haiku-4-5-20251001"
-    return model, body
+    return model, body, frontmatter
 
 
 def load_addresses_from_csv(csv_path: str) -> list[str]:
@@ -119,7 +119,7 @@ def screen_governance(
         len(addresses), network, governance_model or "not specified",
     )
 
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     if len(addresses) == 1:
         body = f"Screen this wallet for DAO governance.\n\nAddress: {addresses[0]}\nNetwork: {network}\n"
@@ -140,7 +140,7 @@ def screen_governance(
     body += f"API Key: {chainaware.api_key()}"
 
     log.info("Calling governance screener (model=%s)", model)
-    result = chainaware.run(body, system=system_prompt, model=model, max_tokens=8192)
+    result = chainaware.run(body, system=system_prompt, model=model,frontmatter=frontmatter, max_tokens=8192)
 
     if not result:
         log.warning("No text block found in response content")

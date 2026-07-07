@@ -56,7 +56,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-haiku-4-5-20251001"
-    return model, body
+    return model, body, frontmatter
 
 
 def greet_wallet(
@@ -75,7 +75,7 @@ def greet_wallet(
         address, network, platform,
     )
 
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     body = (
         f"Generate a personalised welcome message for this wallet.\n\n"
@@ -90,7 +90,7 @@ def greet_wallet(
     body += f"API Key: {chainaware.api_key()}"
 
     log.info("Calling platform greeter (model=%s)", model)
-    result = chainaware.run(body, system=system_prompt, model=model)
+    result = chainaware.run(body, system=system_prompt,frontmatter=frontmatter, model=model)
 
     if not result:
         log.warning("No text block found in response content")

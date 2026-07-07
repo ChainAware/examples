@@ -10,6 +10,7 @@ import os
 import logging
 import httpx
 import anthropic
+from scripts.agent_tools import build_mcp_and_tools
 
 log = logging.getLogger(__name__)
 
@@ -39,7 +40,39 @@ MCP_SERVER = {
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
-def run(prompt: str, system: str = None, model: str = "claude-opus-4-6", max_tokens: int = 4096) -> str:
+def run(prompt: str, frontmatter: str, system: str = None, model: str = "claude-opus-4-8", max_tokens: int = 4096) -> str:
+    """
+    Send a prompt to Claude with the ChainAware MCP tools available.
+    Claude will call the appropriate tools and return a final answer.
+    Pass system to override the default behaviour with an agent definition.
+    """
+    
+    mcp_servers, tools = build_mcp_and_tools(frontmatter)
+    kwargs = {"system": system} if system else {}
+    response = client.beta.messages.create(
+        model=model,
+        max_tokens=max_tokens,
+        mcp_servers=mcp_servers,
+        tools=tools,
+        messages=[{"role": "user", "content": prompt}],
+        betas=["mcp-client-2025-11-20"],
+        **kwargs,
+    )
+    log.info(
+        "Response received — stop_reason=%s input_tokens=%d output_tokens=%d",
+        response.stop_reason,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+    )
+    result = ""
+    for b in response.content:
+        print(b.type)
+        if b.type == "text":
+            result = result + "\n\n" + b.text
+    return result
+
+
+def run_direct(prompt: str, system: str = None, model: str = "claude-opus-4-8", max_tokens: int = 4096) -> str:
     """
     Send a prompt to Claude with the ChainAware MCP tools available.
     Claude will call the appropriate tools and return a final answer.

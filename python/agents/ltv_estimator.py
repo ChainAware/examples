@@ -58,7 +58,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-haiku-4-5-20251001"
-    return model, body
+    return model, body, frontmatter
 
 
 def load_addresses_from_csv(csv_path: str) -> list[str]:
@@ -123,7 +123,7 @@ def estimate_ltv(
         fee_rate or "(default 0.001)",
     )
 
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     address_list = "\n".join(f"- {addr}" for addr in addresses)
     lines = [
@@ -145,7 +145,7 @@ def estimate_ltv(
         "Calling LTV estimator agent (model=%s) with %d wallets on %s",
         model, len(addresses), network,
     )
-    result = chainaware.run(user_message, system=system_prompt, model=model, max_tokens=8192)
+    result = chainaware.run(user_message, system=system_prompt,frontmatter=frontmatter, model=model, max_tokens=10000)
 
     if not result:
         log.warning("No text block found in response content")

@@ -60,7 +60,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-sonnet-4-6"
-    return model, body
+    return model, body, frontmatter
 
 
 def load_addresses_from_csv(csv_path: str) -> list[str]:
@@ -131,7 +131,7 @@ def extract_message(response_text: str) -> str:
 
 
 def generate_message_for_wallet(
-    address: str, network: str, system_prompt: str, model: str, platform: str = ""
+    address: str, network: str, system_prompt: str, model: str, platform: str = "", frontmatter:str = "",
 ) -> str:
     """Call the wallet marketer agent for a single wallet and return the message."""
     platform_line = f"Target platform: {platform}\n" if platform else ""
@@ -143,7 +143,7 @@ def generate_message_for_wallet(
         f"API Key: {chainaware.api_key()}"
     )
     response_text = chainaware.run(
-        user_message, system=system_prompt, model=model, max_tokens=2048
+        user_message, system=system_prompt,frontmatter=frontmatter, model=model, max_tokens=2048
     )
     return extract_message(response_text)
 
@@ -158,7 +158,7 @@ def run_batch(
     addresses = load_addresses_from_csv(csv_path)
     log.info("Loaded %d addresses from %s", len(addresses), csv_path)
 
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
     model = "claude-haiku-4-5-20251001"  # agent MD specifies Sonnet; override for speed
     log.info("Agent loaded — model=%s", model)
 
@@ -167,7 +167,8 @@ def run_batch(
         log.info("[%d/%d] Processing %s", i, len(addresses), address)
         try:
             message = generate_message_for_wallet(
-                address, network, system_prompt, model, platform
+                address, network, system_prompt, model, platform,
+                frontmatter=frontmatter,
             )
         except Exception as exc:
             log.error("Error processing %s: %s", address, exc)

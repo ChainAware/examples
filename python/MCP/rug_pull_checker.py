@@ -59,7 +59,7 @@ def check_rug_pull(contract_address: str, network: str) -> str:
     )
 
     log.info("Calling predictive_rug_pull via ChainAware MCP")
-    result = chainaware.run(prompt)
+    result = chainaware.run_direct(prompt)
 
     if not result:
         log.warning("No result returned from predictive_rug_pull")

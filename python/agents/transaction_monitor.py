@@ -70,7 +70,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-haiku-4-5-20251001"
-    return model, body
+    return model, body, frontmatter
 
 
 def monitor_transaction(
@@ -89,7 +89,7 @@ def monitor_transaction(
         "Evaluating transaction — sender=%s receiver=%s network=%s action=%s",
         sender, receiver, network, action_type or "unspecified",
     )
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     body = (
         f"Evaluate this transaction and return a risk signal.\n\n"
@@ -106,7 +106,7 @@ def monitor_transaction(
     body += f"API Key: {chainaware.api_key()}"
 
     log.info("Calling transaction monitor (model=%s)", model)
-    result = chainaware.run(body, system=system_prompt, model=model, max_tokens=4096)
+    result = chainaware.run(body, system=system_prompt,frontmatter=frontmatter, model=model, max_tokens=4096)
 
     if not result:
         log.warning("No text block found in response content")

@@ -59,7 +59,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-haiku-4-5-20251001"
-    return model, body
+    return model, body, frontmatter
 
 
 def load_addresses_from_csv(csv_path: str) -> list[str]:
@@ -95,7 +95,7 @@ def score_trust(addresses: list[str], network: str) -> str:
     Behaviour is driven by the chainaware-trust-scorer.md agent definition.
     """
     log.info("Starting trust scoring — %d address(es) network=%s", len(addresses), network)
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     if len(addresses) == 1:
         body = f"Return the trust score for this wallet.\n\nAddress: {addresses[0]}\nNetwork: {network}\n"
@@ -109,7 +109,7 @@ def score_trust(addresses: list[str], network: str) -> str:
     body += f"API Key: {chainaware.api_key()}"
 
     log.info("Calling trust scorer (model=%s)", model)
-    result = chainaware.run(body, system=system_prompt, model=model)
+    result = chainaware.run(body, system=system_prompt,frontmatter=frontmatter, model=model)
 
     if not result:
         log.warning("No text block found in response content")

@@ -64,7 +64,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-haiku-4-5-20251001"
-    return model, body
+    return model, body, frontmatter
 
 
 def audit_launch(contract: str, deployer: str, network: str) -> str:
@@ -74,7 +74,7 @@ def audit_launch(contract: str, deployer: str, network: str) -> str:
     """
     log.info("Starting token launch audit — contract=%s deployer=%s network=%s",
              contract, deployer, network)
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     body = (
         f"Audit this token launch and return a listing verdict.\n\n"
@@ -87,7 +87,7 @@ def audit_launch(contract: str, deployer: str, network: str) -> str:
     )
 
     log.info("Calling token launch auditor (model=%s)", model)
-    result = chainaware.run(body, system=system_prompt, model=model, max_tokens=8192)
+    result = chainaware.run(body, system=system_prompt,frontmatter=frontmatter, model=model, max_tokens=8192)
 
     if not result:
         log.warning("No text block found in response content")

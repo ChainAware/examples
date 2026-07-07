@@ -43,7 +43,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-sonnet-4-6"
-    return model, body
+    return model, body, frontmatter
 
 
 def audit_wallet(wallet_address: str, network: str) -> str:
@@ -53,7 +53,7 @@ def audit_wallet(wallet_address: str, network: str) -> str:
     """
     log.info("Starting audit for wallet=%s network=%s", wallet_address, network)
 
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     user_message = (
         f"Run a full due diligence audit on this wallet.\n\n"
@@ -63,7 +63,7 @@ def audit_wallet(wallet_address: str, network: str) -> str:
     )
 
     log.info("Calling ChainAware MCP via chainaware-wallet-auditor agent (model=%s)", model)
-    result = chainaware.run(user_message, system=system_prompt, model=model)
+    result = chainaware.run(user_message, system=system_prompt, frontmatter=frontmatter, model=model)
 
     if not result:
         log.warning("No text block found in response content")

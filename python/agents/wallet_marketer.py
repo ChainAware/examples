@@ -61,7 +61,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-sonnet-4-6"
-    return model, body
+    return model, body, frontmatter
 
 
 def load_addresses_from_csv(csv_path: str) -> list[str]:
@@ -97,7 +97,7 @@ def generate_marketing(addresses: list[str], network: str, platform: str = "") -
     Behaviour is driven by the chainaware-wallet-marketer.md agent definition.
     """
     log.info("Starting wallet marketing — %d address(es) network=%s", len(addresses), network)
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     platform_line = f"Target platform: {platform}\n" if platform else ""
 
@@ -114,7 +114,7 @@ def generate_marketing(addresses: list[str], network: str, platform: str = "") -
     body += f"API Key: {chainaware.api_key()}"
 
     log.info("Calling wallet marketer (model=%s)", model)
-    result = chainaware.run(body, system=system_prompt, model=model, max_tokens=8192)
+    result = chainaware.run(body, system=system_prompt,frontmatter=frontmatter, model=model, max_tokens=8192)
 
     if not result:
         log.warning("No text block found in response content")

@@ -58,7 +58,7 @@ def detect_fraud(wallet_address: str, network: str) -> str:
     )
 
     log.info("Calling predictive_fraud via ChainAware MCP")
-    result = chainaware.run(prompt)
+    result = chainaware.run_direct(prompt)
 
     if not result:
         log.warning("No text block found in response content")

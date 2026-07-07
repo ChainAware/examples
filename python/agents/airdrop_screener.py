@@ -52,7 +52,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-haiku-4-5-20251001"
-    return model, body
+    return model, body, frontmatter
 
 
 def load_addresses_from_csv(csv_path: str) -> list[str]:
@@ -104,7 +104,7 @@ def screen_airdrop(csv_path: str, network: str) -> str:
     addresses = load_addresses_from_csv(csv_path)
     log.info("Loaded %d addresses for network=%s", len(addresses), network)
 
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     address_list = "\n".join(f"- {addr}" for addr in addresses)
     user_message = (
@@ -119,7 +119,7 @@ def screen_airdrop(csv_path: str, network: str) -> str:
         "Calling airdrop screener agent (model=%s) with %d wallets on %s",
         model, len(addresses), network,
     )
-    result = chainaware.run(user_message, system=system_prompt, model=model, max_tokens=8192)
+    result = chainaware.run(user_message, system=system_prompt, model=model,frontmatter=frontmatter, max_tokens=10000)
 
     if not result:
         log.warning("No text block found in response content")

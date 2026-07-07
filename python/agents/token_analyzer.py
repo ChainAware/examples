@@ -57,7 +57,7 @@ def load_agent(path: str) -> tuple[str, str]:
     body = parts[2].strip() if len(parts) >= 3 else content.strip()
     m = re.search(r"^model:\s*(.+)$", frontmatter, re.MULTILINE)
     model = m.group(1).strip() if m else "claude-haiku-4-5-20251001"
-    return model, body
+    return model, body, frontmatter
 
 
 def analyze_token(contract: str, network: str, due_diligence: bool = False) -> str:
@@ -67,7 +67,7 @@ def analyze_token(contract: str, network: str, due_diligence: bool = False) -> s
     """
     log.info("Starting token analysis — contract=%s network=%s due_diligence=%s",
              contract, network, due_diligence)
-    model, system_prompt = load_agent(AGENT_MD)
+    model, system_prompt,frontmatter = load_agent(AGENT_MD)
 
     body = f"Get the community rank and top holders for this token. Do not run fraud screening unless explicitly asked.\n\nContract: {contract}\nNetwork: {network}\n"
     if due_diligence:
@@ -75,7 +75,7 @@ def analyze_token(contract: str, network: str, due_diligence: bool = False) -> s
     body += f"API Key: {chainaware.api_key()}"
 
     log.info("Calling token analyzer (model=%s)", model)
-    result = chainaware.run(body, system=system_prompt, model=model, max_tokens=8192)
+    result = chainaware.run(body, system=system_prompt,frontmatter=frontmatter, model=model, max_tokens=8192)
 
     if not result:
         log.warning("No text block found in response content")
