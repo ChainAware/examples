@@ -16,7 +16,7 @@ description: >
   Requires: wallet address(es) + blockchain network + platform description (free text).
   Optional: campaign goal (acquisition / retention / monetization / re-engagement),
   existing product/tier the wallets are on (for upsell targeting).
-tools: mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: Agent, mcp__chainaware-behavioral-prediction__predictive_fraud
 model: claude-haiku-4-5-20251001
 ---
 
@@ -439,3 +439,4 @@ For experienced traders. Goal: monetization."
 - Complete Product Guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp
 - Pricing & API Access: https://chainaware.ai/pricing
+
