@@ -86,6 +86,7 @@ tool instructions and output format in the agent file rather than in code.
 | `rug_pull_checker.py` | `chainaware-rug-pull-detector.md` | Rug pull risk on a smart contract or LP |
 | `aml_scorer.py` | `chainaware-aml-scorer.md` | AML compliance score (0–100) with full forensic flag breakdown |
 | `agent_screener.py` | `chainaware-agent-screener.md` | Trust score (0–10) for an AI agent — checks operational wallet + feeder wallet. Accepts optional `agent_type` and `feeder_type` (`wallet`/`contract`) to route fraud vs rug pull check. Requires `ETHERSCAN_API_KEY` for automatic contract detection. |
+| `agent_trust_screener.py` | `chainaware-agent-trust-screener.md` | ERC-8004 agent registry screening — discover and rank registered AI agents by trust score (0–1000), or fetch the full trust profile for a specific agent by `agent_id` + `chain_id`. |
 | `credit_scorer.py` | `chainaware-credit-scorer.md` | Crypto credit score (1–9) combining fraud probability and social graph analysis |
 | `defi_advisor.py` | `chainaware-defi-advisor.md` | Personalized DeFi product recommendations calibrated to experience and risk appetite |
 
@@ -99,6 +100,8 @@ python python/agents/agent_screener.py 0xAGENT... 0xFEEDER... ETH              #
 python python/agents/agent_screener.py 0xAGENT... 0xCONTRACT... ETH wallet contract  # feeder is a contract
 python python/agents/agent_screener.py 0xCONTRACT... 0xFEEDER... ETH contract  # agent is a contract
 python python/agents/agent_screener.py 0xCONTRACT... 0xCONTRACT... ETH contract contract  # both contracts
+python python/agents/agent_trust_screener.py                                   # discover top registered agents
+python python/agents/agent_trust_screener.py 1 56                              # deep profile: agent #1 on BNB
 python python/agents/credit_scorer.py
 python python/agents/defi_advisor.py
 ```
@@ -164,6 +167,7 @@ python python/agents/whale_detector.py wallets.csv ETH
 |--------|-------|-------|-------------|
 | `token_analyzer.py` | `chainaware-token-analyzer.md` | contract + network | Community rank + top holder profiles + holder quality assessment |
 | `token_ranker_single.py` | `chainaware-token-analyzer.md` | contract + network | Community rank + top holders for a single token (ranking-focused view) |
+| `token_audit_analyst.py` | `chainaware-token-audit-analyst.md` | contract + network | Deep contract audit — ownership, liquidity, mint/supply, honeypot, reentrancy — 0–100 risk score |
 | `token_launch_auditor.py` | `chainaware-token-launch-auditor.md` | contract + deployer + network | Launch Safety Score + APPROVED/CONDITIONAL/REJECTED verdict + safety badge |
 | `token_ranker_list.py` | `chainaware-token-ranker.md` | network + category | Top tokens ranked by holder community strength |
 | `transaction_monitor.py` | `chainaware-transaction-monitor.md` | sender + receiver + network | Real-time risk signal: ALLOW / FLAG / HOLD / BLOCK |
@@ -173,6 +177,9 @@ python python/agents/token_analyzer.py 0xCONTRACT... ETH
 python python/agents/token_analyzer.py 0xCONTRACT... ETH fraud
 python python/agents/token_ranker_single.py 0xa0820613976b441e2c6a90e4877e2fb5f7d72552 BASE
 python python/agents/token_ranker_single.py 0xCONTRACT... ETH        # also screen top holders
+python python/agents/token_audit_analyst.py                          # demo: PEPE on ETH
+python python/agents/token_audit_analyst.py 0xCONTRACT... eth
+python python/agents/token_audit_analyst.py 0xCONTRACT... bsc
 python python/agents/token_launch_auditor.py 0xCONTRACT... 0xDEPLOYER... ETH
 python python/agents/token_ranker_list.py ETH "DeFi Token" 10
 python python/agents/token_ranker_list.py SOLANA "AI Token" 5
@@ -254,7 +261,7 @@ client with the ChainAware MCP server and exposes:
 
 ## Agent Definitions
 
-`.claude/agents/` contains 32 ready-made agent definitions pulled from the
+`.claude/agents/` contains 34 ready-made agent definitions pulled from the
 [behavioral-prediction-mcp](https://github.com/ChainAware/behavioral-prediction-mcp/tree/main/.claude/agents)
 repo. To refresh them:
 

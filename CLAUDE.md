@@ -38,7 +38,7 @@ When creating a new agent-based example in `python/agents/`:
 2. Parse frontmatter with `---` split to extract `model`
 3. Use the body as the `system` prompt
 4. Pass a minimal user message (wallet/contract/network only — no API key)
-5. Call `chainaware.run(user_message, system=system_prompt, model=model)`
+5. Call `chainaware.run(user_message, frontmatter=frontmatter, system=system_prompt, model=model)`
 
 Standard `load_agent()` function to reuse across all agent scripts:
 
@@ -47,7 +47,7 @@ AGENT_MD = os.path.join(
     os.path.dirname(__file__), "..", "..", ".claude", "agents", "<agent-name>.md"
 )
 
-def load_agent(path: str) -> tuple[str, str]:
+def load_agent(path: str) -> tuple[str, str, str]:
     with open(path) as f:
         content = f.read()
     parts = content.split("---", 2)
@@ -111,6 +111,7 @@ else:
 | `rug_pull_checker.py` | `chainaware-rug-pull-detector.md` |
 | `aml_scorer.py` | `chainaware-aml-scorer.md` |
 | `agent_screener.py` | `chainaware-agent-screener.md` |
+| `agent_trust_screener.py` | `chainaware-agent-trust-screener.md` |
 | `credit_scorer.py` | `chainaware-credit-scorer.md` |
 | `defi_advisor.py` | `chainaware-defi-advisor.md` |
 
@@ -140,6 +141,7 @@ else:
 |--------|-------|
 | `token_analyzer.py` | `chainaware-token-analyzer.md` |
 | `token_ranker_single.py` | `chainaware-token-analyzer.md` |
+| `token_audit_analyst.py` | `chainaware-token-audit-analyst.md` |
 | `token_launch_auditor.py` | `chainaware-token-launch-auditor.md` |
 | `token_ranker_list.py` | `chainaware-token-ranker.md` |
 | `transaction_monitor.py` | `chainaware-transaction-monitor.md` |
@@ -159,7 +161,7 @@ else:
 ## Agent Definitions
 
 `.claude/agents/` files come from the upstream repo and **must not be hand-edited**.
-To refresh all 32 agent definitions from GitHub:
+To refresh all 34 agent definitions from GitHub:
 
 ```bash
 gh api repos/ChainAware/behavioral-prediction-mcp/contents/.claude/agents | python3 -c "
@@ -182,6 +184,8 @@ python python/agents/wallet_auditor.py
 python python/agents/rug_pull_checker.py
 python python/agents/aml_scorer.py
 python python/agents/agent_screener.py
+python python/agents/agent_trust_screener.py                        # list top registered agents
+python python/agents/agent_trust_screener.py 1 56                   # deep profile: agent #1 on BNB
 python python/agents/credit_scorer.py
 python python/agents/defi_advisor.py
 
@@ -226,6 +230,9 @@ python python/agents/whale_detector.py wallets.csv ETH
 python python/agents/token_analyzer.py 0xCONTRACT... ETH
 python python/agents/token_ranker_single.py 0xa0820613976b441e2c6a90e4877e2fb5f7d72552 BASE
 python python/agents/token_ranker_single.py 0xCONTRACT... ETH
+python python/agents/token_audit_analyst.py                         # demo: PEPE on ETH
+python python/agents/token_audit_analyst.py 0xCONTRACT... eth
+python python/agents/token_audit_analyst.py 0xCONTRACT... bsc
 python python/agents/token_launch_auditor.py 0xCONTRACT... 0xDEPLOYER... ETH
 python python/agents/token_ranker_list.py ETH "DeFi Token" 10
 python python/agents/transaction_monitor.py 0xSENDER... 0xRECEIVER... ETH
