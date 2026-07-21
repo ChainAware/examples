@@ -449,4 +449,3 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 - Complete Product Guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp
 - Pricing & API Access: https://chainaware.ai/pricing
-

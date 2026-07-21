@@ -439,4 +439,3 @@ For experienced traders. Goal: monetization."
 - Complete Product Guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp
 - Pricing & API Access: https://chainaware.ai/pricing
-

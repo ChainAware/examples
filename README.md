@@ -18,7 +18,7 @@ Python examples showing how to use the [ChainAware Behavioral Prediction MCP](ht
 ## Prerequisites
 
 ```bash
-pip install anthropic
+pip install anthropic mcp
 ```
 
 ### API Keys
@@ -247,10 +247,14 @@ python python/MCP/token_ranker.py
 
 ## Shared Helper
 
-`python/chainaware.py` is imported by all scripts. It configures the Anthropic
-client with the ChainAware MCP server and exposes:
+`python/chainaware_sse.py` is imported by all scripts as `chainaware`. It opens a
+**persistent SSE connection** to the ChainAware MCP server at module import time and
+reuses it across every call — avoiding repeated connect/disconnect cycles and
+supporting local MCP servers (`http://localhost:5000/sse`) that Anthropic's managed
+MCP beta cannot reach. Exposes:
 
-- `run(prompt, system, model)` — calls Claude with MCP tools available
+- `run(prompt, frontmatter, system, model)` — agentic tool-use loop; filters tools from agent frontmatter
+- `run_direct(prompt, system, model)` — agentic loop with all MCP tools available; used by `python/MCP/` scripts
 - `api_key()` — returns the ChainAware API key for injecting into prompts
 - `is_contract(address, chain)` — async; detects contract vs EOA via Etherscan V2 API.
   Used by `agent_screener.py` and `compliance_screener.py` for automatic

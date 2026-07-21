@@ -14,21 +14,32 @@
 ## Project Structure
 
 ```
-python/MCP/        Direct MCP examples (call tools via user prompt)
-python/agents/     Agent-based examples (load .md as system prompt)
-python/scripts/    Utility scripts (run_all_examples.py)
-python/chainaware.py  Shared helper — imported by all scripts
-.claude/agents/    32 agent definitions pulled from behavioral-prediction-mcp repo
+python/MCP/            Direct MCP examples (call tools via user prompt)
+python/agents/         Agent-based examples (load .md as system prompt)
+python/scripts/        Utility scripts (run_all_examples.py)
+python/chainaware_sse.py  Shared helper — imported by all scripts
+.claude/agents/        34 agent definitions pulled from behavioral-prediction-mcp repo
 ```
 
 ## Shared Helper
 
-All scripts import `chainaware` from `python/chainaware.py`.
+All scripts import `chainaware_sse` as `chainaware` from `python/chainaware_sse.py`.
 Scripts in `python/agents/` and `python/MCP/` must add this to their `sys.path`:
 
 ```python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+import chainaware_sse as chainaware
 ```
+
+`chainaware_sse` opens **one persistent SSE connection** per process at module import
+time and reuses it across every `run()` call. This avoids repeated connect/disconnect
+cycles and supports local MCP servers (e.g. `http://localhost:5000/sse`) that
+Anthropic's managed MCP beta cannot reach.
+
+Exposes:
+- `run(prompt, frontmatter, system, model)` — agentic loop with tool filtering from frontmatter
+- `run_direct(prompt, system, model)` — all MCP tools available; used by `python/MCP/` scripts
+- `api_key()` — returns the ChainAware API key for injecting into prompts
 
 ## Agent Example Pattern
 
@@ -39,6 +50,7 @@ When creating a new agent-based example in `python/agents/`:
 3. Use the body as the `system` prompt
 4. Pass a minimal user message (wallet/contract/network only — no API key)
 5. Call `chainaware.run(user_message, frontmatter=frontmatter, system=system_prompt, model=model)`
+   (`chainaware` is `chainaware_sse` imported as `chainaware`)
 
 Standard `load_agent()` function to reuse across all agent scripts:
 

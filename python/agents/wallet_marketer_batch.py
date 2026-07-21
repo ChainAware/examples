@@ -38,7 +38,7 @@ import sys
 import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-import chainaware
+import chainaware_sse as chainaware
 
 logging.basicConfig(
     level=logging.INFO,
