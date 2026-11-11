@@ -300,3 +300,30 @@ ChainAware received a **[$250k Google Cloud Grant](https://chainaware.ai/blog/go
 ChainAware was accepted into the **[AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/)** — selected by AWS for its Fintech Accelerator programme (2024).
 
 ChainAware is featured in the **[Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613)** — listed in Growth Tools for Web3 Projects (2024).
+
+---
+
+## Further Reading
+
+### Tool Guides
+- [Complete Product Guide](https://chainaware.ai/blog/chainaware-ai-products-complete-guide/) — Overview of all tools, networks, and coverage
+- [Fraud Detector Guide](https://chainaware.ai/blog/chainaware-fraud-detector-guide/) — `predictive_fraud`: inputs, outputs, thresholds, use cases
+- [Rug Pull Detector Guide](https://chainaware.ai/blog/chainaware-rugpull-detector-guide/) — `predictive_rug_pull`: contract scoring, deployer risk, LP analysis
+- [Wallet Auditor Guide](https://chainaware.ai/blog/chainaware-wallet-auditor-how-to-use/) — Full wallet audit workflow combining multiple tools
+- [Transaction Monitoring Guide](https://chainaware.ai/blog/chainaware-transaction-monitoring-guide/) — Real-time transaction risk monitoring patterns
+- [Web3 Behavioral Analytics Guide](https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/) — `predictive_behaviour` for user analytics and segmentation
+- [Credit Score Guide](https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/) — Web3 credit scoring methodology and use in DeFi lending
+- [Agent Trust Score](https://chainaware.ai/blog/agent-trust-score-agentic-commerce/) — `agents_trust_score`: ERC-8004 registry, trust tiers, fleet-level fraud detection
+- [AML Integration Guide for DApps](https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/) — `aml_screener` integration patterns; VASP compliance, real-time screening
+
+### Scale & Accuracy
+- [Token Audit: 10,000 CoinGecko Token Results](https://chainaware.ai/blog/token-audit-10000-coingecko-results/) — 55% HIGH RISK; 127 automated checks via `run_token_audit`
+- [Token Audit at Scale: 15,000 EVM Tokens](https://chainaware.ai/blog/token-audit-15000-coingecko-coinmarketcap-2026/) — 57.7% HIGH RISK across CoinGecko + CoinMarketCap
+- [$284M+ Rug Pulls on PancakeSwap V2](https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/) — 90.1% detection rate across 103,695 rug pull events
+
+### Developer Integration
+- [Prediction MCP Developer Guide](https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/) — Full MCP integration guide with code examples
+- [12 Blockchain Capabilities Any AI Agent Can Use](https://chainaware.ai/blog/12-blockchain-capabilities-any-ai-agent-can-use-mcp-integration-guide/) — All 12 capabilities with setup for Claude, ChatGPT, Cursor, multi-agent systems
+
+### KYA & Agentic Commerce
+- [Know Your Agent (KYA) — Behavioral Trust Layer](https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/) — Why agent identity ≠ agent trust; foundation for `agents_trust_score`
