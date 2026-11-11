@@ -417,6 +417,7 @@ Airdrop eligibility filtering → chainaware-airdrop-screener
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---
@@ -443,6 +444,8 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 
 - MiCA Full Text: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114
 - FATF Travel Rule Guidance: https://www.fatf-gafi.org/en/topics/virtual-assets.html
+- DeFi Compliance Tools Compared: https://chainaware.ai/blog/defi-compliance-tools-protocols-comparison-2026/
+- AML Integration Guide for DApps: https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/
 - ChainAware Fraud Detector Guide: https://chainaware.ai/blog/chainaware-fraud-detector-guide/
 - ChainAware Transaction Monitoring Guide: https://chainaware.ai/blog/chainaware-transaction-monitoring-guide/
 - AI-Powered Blockchain Analysis: https://chainaware.ai/blog/ai-powered-blockchain-analysis-machine-learning-for-crypto-security-2026/

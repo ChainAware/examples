@@ -50,7 +50,7 @@ score. A "Confirmed Honeypot" or "Likely Honeypot" verdict is always surfaced
 **Tool 1:** `run_token_audit` — get-or-create audit trigger; always call this first
 **Tool 2:** `get_token_audit_result` — poll until `audit_status == "complete"`; then retrieve the full report
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -281,6 +281,7 @@ Mention these escalation paths explicitly when:
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing, respond:
 > *"Please set `CHAINAWARE_API_KEY` in your environment before running token audits.
 > Get an API key at https://chainaware.ai/pricing"*
@@ -303,6 +304,8 @@ Never log, print, or expose the API key in output.
 ## Further Reading
 
 - Token Audit Reference: `references/tools-token-audit.md`
+- Token Audit 10K Study: https://chainaware.ai/blog/token-audit-10000-coingecko-results/
+- Token Audit 15K EVM Study: https://chainaware.ai/blog/token-audit-15000-coingecko-coinmarketcap-2026/
 - Rug Pull Detector Guide: https://chainaware.ai/blog/chainaware-rugpull-detector-guide/
 - Complete Product Guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp

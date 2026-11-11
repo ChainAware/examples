@@ -35,7 +35,7 @@ website or whitepaper looks.
 
 **Primary:** `predictive_rug_pull` — scores the contract/LP address
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -147,6 +147,7 @@ If multiple contracts are provided, screen in sequence and return a summary tabl
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing, respond:
 > *"Please set `CHAINAWARE_API_KEY` in your environment before running rug pull checks.
 > Get an API key at https://chainaware.ai/pricing"*
@@ -158,6 +159,8 @@ Never log, print, or expose the API key in output.
 ## Further Reading
 
 - Rug Pull vs Pump & Dump Guide: https://chainaware.ai/blog/pump-and-dump-vs-rug-pull/
+- $284M+ PancakeSwap V2 Accuracy Benchmark: https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/
+- Rug Pull Detection Tools Compared: https://chainaware.ai/blog/best-web3-rug-pull-detection-tools-2026/
 - Complete Product Guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/#fraud-tech
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp
 - Pricing & API Access: https://chainaware.ai/pricing

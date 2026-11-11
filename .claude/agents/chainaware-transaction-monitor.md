@@ -40,7 +40,7 @@ and low-latency. Avoid narrative prose — lead with the signal.
 **Secondary:** `predictive_rug_pull` — contract risk (only when a contract address is involved)
 **Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -311,6 +311,7 @@ Governance vote transaction         → chainaware-governance-screener
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---
@@ -332,6 +333,7 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 
 ## Further Reading
 
+- AML Integration Guide for DApps: https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/
 - Transaction Monitoring Guide: https://chainaware.ai/blog/chainaware-transaction-monitoring-guide/
 - The Web3 Agentic Economy: https://chainaware.ai/blog/the-web3-agentic-economy-how-ai-agents-are-replacing-human-teams-in-defi/
 - Fraud Detector Guide: https://chainaware.ai/blog/chainaware-fraud-detector-guide/

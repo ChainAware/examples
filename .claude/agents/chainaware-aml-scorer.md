@@ -50,7 +50,7 @@ ELSE (all forensic details are clean):
 
 **Tool:** `predictive_fraud`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -196,6 +196,7 @@ For multiple wallets, process each and return a compliance table:
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing, respond:
 > *"Please set `CHAINAWARE_API_KEY` in your environment.
 > Get an API key at https://chainaware.ai/pricing"*
@@ -212,6 +213,8 @@ If missing, respond:
 
 ## Further Reading
 
+- AML Integration Guide for DApps: https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/
+- Wallet Forensics & AML Reports: https://chainaware.ai/blog/chainaware-investigation-wallet-forensics-aml-reports/
 - AML & Web3 Security: https://chainaware.ai/blog/driving-web3-security-and-growth-key-takeaways-from-our-recent-x-space/
 - Complete Product Guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/#fraud-tech
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp
