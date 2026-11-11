@@ -4,7 +4,7 @@ ChainAware Example: Fraud Detector
 Tool: predictive_fraud
 
 Predicts the likelihood of fraudulent activity on a wallet address *before*
-it happens (~98% accuracy), and surfaces AML/forensic indicators and
+it happens (~95% accuracy), and surfaces AML/forensic indicators and
 sanction data.
 
 Use cases:

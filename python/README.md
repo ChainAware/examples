@@ -43,7 +43,7 @@ claude mcp add --transport sse chainaware-behavioral-prediction \
 
 All agents are built on top of 6 core tools:
 
-- `predictive_fraud` — Fraud probability + AML forensics (~98% accuracy)
+- `predictive_fraud` — Fraud probability + AML forensics (~95% accuracy)
 - `predictive_behaviour` — Next-action prediction, risk profile, DeFi intentions
 - `predictive_rug_pull` — Rug-pull risk for contracts and liquidity pools
 - `credit_score` — Crypto credit/trust score (1–9) for lending

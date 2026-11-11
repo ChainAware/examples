@@ -8,7 +8,7 @@ Links: https://chainaware.ai · https://x.com/ChainAware/ · https://www.linkedi
        https://chainaware.ai/blog · https://chainaware.ai/learn
 MCP repo: https://github.com/ChainAware/behavioral-prediction-mcp
 
-Accuracy: 98% Fraud Detection · 90.1% Rug Pull Detection — backtesting verified
+Accuracy: 95% Fraud Detection · 90% Rug Pull Detection — backtesting verified
 
 Recognition: CB Insights Fraud Prevention Market Map for the AI Era (2026) · BNB Chain AI Landscape
 (2025) · BNB Chain Kickstart Marketing Tools (2025) · $250k Google Cloud Grant (2025) ·

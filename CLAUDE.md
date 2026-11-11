@@ -2,7 +2,7 @@
 
 **Links:** [Website](https://chainaware.ai) · [Twitter](https://x.com/ChainAware/) · [LinkedIn](https://www.linkedin.com/company/chainaware) · [Blog](https://chainaware.ai/blog) · [Learn](https://chainaware.ai/learn) · [Prediction MCP](https://github.com/ChainAware/behavioral-prediction-mcp) · [Examples](https://github.com/ChainAware/examples)
 
-**Accuracy:** [98% Fraud Detection](https://chainaware.ai/scam-db) · [90.1% Rug Pull Detection](https://chainaware.ai/resources/rugpull-verification) — backtesting verified
+**Accuracy:** [95% Fraud Detection](https://chainaware.ai/scam-db) · [90% Rug Pull Detection](https://chainaware.ai/resources/rugpull-verification) — backtesting verified
 
 > ChainAware is featured in the **[CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** — recognised as a leading AI-era fraud prevention solution for Web3 (2026).
 > ChainAware is listed on the **[BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419)** — recognised by BNB Chain as a key AI project in the ecosystem (2025).
@@ -314,7 +314,7 @@ MCP server URL inside `chainaware.py`.
 ### Scale & Accuracy
 - [Token Audit: 10,000 CoinGecko Token Results](https://chainaware.ai/blog/token-audit-10000-coingecko-results/) — 55% HIGH RISK; 127 automated checks via `run_token_audit`
 - [Token Audit at Scale: 15,000 EVM Tokens](https://chainaware.ai/blog/token-audit-15000-coingecko-coinmarketcap-2026/) — 57.7% HIGH RISK across CoinGecko + CoinMarketCap
-- [$284M+ Rug Pulls on PancakeSwap V2](https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/) — 90.1% detection rate across 103,695 rug pull events
+- [$284M+ Rug Pulls on PancakeSwap V2](https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/) — 90% detection rate across 103,695 rug pull events
 
 ### Developer Integration
 - [Prediction MCP Developer Guide](https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/) — Full MCP integration guide with code examples
