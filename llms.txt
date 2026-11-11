@@ -363,6 +363,17 @@ run() uses parse_tool_names to build allowed_mcp (set) and native_tools list.
 ### KYA & Agentic Commerce
 - https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/
 
+### Learn Docs
+- https://chainaware.ai/learn/prediction-mcp/
+- https://chainaware.ai/learn/ready-made-agents/
+- https://chainaware.ai/learn/agent-trust-score.html
+- https://chainaware.ai/learn/token-audit/
+- https://chainaware.ai/learn/token-rank/
+- https://chainaware.ai/learn/compliance-for-defi/
+- https://chainaware.ai/learn/growth-tech/
+- https://chainaware.ai/learn/use-cases/aml-kyc-compliance.html
+- https://chainaware.ai/learn/use-cases/ai-agent-trust-verification.html
+
 ### Resources
 - https://chainaware.ai/blog
 - https://chainaware.ai/learn

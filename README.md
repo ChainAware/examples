@@ -327,3 +327,13 @@ ChainAware is featured in the **[Safary Club Web3 Growth Landscape — Growth To
 
 ### KYA & Agentic Commerce
 - [Know Your Agent (KYA) — Behavioral Trust Layer](https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/) — Why agent identity ≠ agent trust; foundation for `agents_trust_score`
+
+### Learn Docs
+- [Prediction MCP](https://chainaware.ai/learn/prediction-mcp/) — Tool schemas, authentication, x402 payments, all 14 tools
+- [Ready-made Agents](https://chainaware.ai/learn/ready-made-agents/) — 34 pre-built subagents: frontmatter, tools, networks, usage
+- [Agent Trust Score](https://chainaware.ai/learn/agent-trust-score.html) — ERC-8004 behavioral trust scoring reference
+- [Token Audit](https://chainaware.ai/learn/token-audit/) — 11-module contract audit docs
+- [Token Rank](https://chainaware.ai/learn/token-rank/) — Holder-quality scoring reference
+- [MiCA Compliance for DeFi](https://chainaware.ai/learn/compliance-for-defi/) — AML screening and MiCA obligations
+- [Growth Tech](https://chainaware.ai/learn/growth-tech/) — Growth agents and wallet personalisation
+- [Use Cases](https://chainaware.ai/learn/use-cases/aml-kyc-compliance.html) — AML/KYC, credit scoring, rug pull prevention, Sybil resistance, agent trust
